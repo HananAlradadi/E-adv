@@ -20,11 +20,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import math
-
+import git
 import pandas as pd
 import json
 E_ADVISOR_APP = Flask(__name__)
-E_ADVISOR_APP = Flask(__name__)
+@E_ADVISOR_APP.route('/git_update', methods=['POST'])
+def git_update():
+    repo = git.Repo('./E-adv')
+    origin = repo.remotes.origin
+    repo.create_head('main',
+                     origin.refs.main).set_tracking_branch(origin.refs.main).checkout()
+    origin.pull()
+    return '', 200
 chrome_options = webdriver.ChromeOptions()
 #chrome_options.headless = True
 settings = {
