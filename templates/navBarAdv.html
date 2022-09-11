@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title> {{t}}</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/bootstrap/css/bootstrap.min.css') }}>
+<link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/boxicons/css/boxicons.min.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/quill/quill.snow.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/quill/quill.bubble.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/remixicon/remixicon.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/simple-datatables/style.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/css/style.css') }}>
+
+
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.3.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body >
+
+  <!-- ======= Header ======= -->
+<header>
+        <nav class="navbar navbar-expand-lg " style="direction: rtl;">
+            <div class="container-fluid" id="navbar" >
+
+
+                    <div id="webname">
+                        <a style="display: inline;" href="index.html"><img src="images/logo1.png" style=" display: inline;" width="42" height="45" ></a>
+                    </div>
+                    <span style="display:inline; float:left; color: rgb(36, 46, 156); padding-left: 9px; padding-top: 17px; font-size: 19px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><span style="color:rgb(54, 124, 159);">E-</span>ADVISOR</span>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ">
+                    <li id="home" style="float:right;"><a onclick="window.location.href = '{{ url_for('home') }}'"> الصفحة الرئيسية </a></li>
+                    <li id="Subscribe" style="float: right;"><a onclick="window.location.href = '{{ url_for('prerequset') }}'" > متطلبات المقررات </a></li>
+                   <li id="Subscribe" style="float: right;"><a onclick="window.location.href = '{{ url_for('listOfStudentName') }}'" >خدمات الطلاب</a></li>
+                   <li id="apps" style="float:right;"><a onclick="window.location.href = '{{ url_for('StatisticForNextSemesterStudents') }}'">احصائيات الفصل القادم</a></li>
+                   <li id="contact" style="float:right;"><a  onclick="window.location.href = '{{ url_for('logout') }}'">تسجيل الخروج</a></li>
+                </ul>
+
+                </div>
+              </div>
+            </div>
+          </nav>
+</header>
+      <!-- End Header -->
+{% block body %}
+
+  {% endblock %}
+  <!-- ======= Sidebar ======= -->
+  <!-- End Sidebar-->
+
+ 
+ 
+
+  <!-- Vendor JS Files -->
+
+      <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+      <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/chart.js/chart.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/echarts/quill.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/quil/echarts.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/tinymce/tinymce.min.j') }}"></script>
+
+        <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/php-email-form/validate.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static',filename='/assets/js/main.js') }}"></script>
+  <!-- Template Main JS File -->
+
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1 style="text-align: center;">متطلبات المقررات</h1>
+
+    </div><!-- End Page Title -->
+
+      <section class="section">
+        <div class="row">
+          <div class="col-lg-8">
+
+            <div class="card text-center" >
+              <div class="card-body">
+                <h5 class="card-title"></h5>
+                <!-- Default Table -->
+                <div class="row align-items-center">
+
+                  <div class="col" style="align-items: center;">
+                    <div class="row">
+                      <div class="col-6">
+                        <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4 border-end">
+                          <nav class="nav nav-pills flex-column">
+                            <div class="overflow-auto">
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >
+
+                              <option style="text-align: center;" class="form-select form-select-lg mb-3" selected>المقرر</option>
+                                {% for courses in coursesname %}
+                              <option  style="text-align: center" class="form-select form-select-lg mb-3" >{{courses}}</option>
+                              {% endfor %}
+                            </select>
+                      </div>
+                            </nav>
+                          </nav>
+                        </nav>
+                      </div>
+                      <div class="col-6">
+                        <div class="table-responsive">
+
+                <table id = 'myTable' class=" table table-striped table-primary table-hover table-bordered" style="direction: rtl;" >
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+
+                      <th scope="col">أسم المقرر</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+
+
+                  </tbody>
+                </table>
+             </div>
+                <!-- End Default Table Example -->
+              </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+        </div>
+
+    </section>
+
+  </main>
+                <!-- End Default Table Example -->
+              </div>
+            </div>
+    </section>
+
+  </main>
+
+<script>
+  prerequsets = {{pr | safe}}
+$('select').change(function(){
+   var index = $('option:selected',this).index()-1;
+    var table = document.getElementById("myTable").getElementsByTagName('tbody')[0]
+
+  rows = "";
+  for (i = 0 ; i < prerequsets[index].length ; i++){
+    rows += '<tr><td>' + (i+1) + '</td><td>' + prerequsets[index][i] + '</td> </tr>';
+
+
+  }
+  table.innerHTML = rows
+});
+
+</script>
