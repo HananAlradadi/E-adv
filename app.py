@@ -26,7 +26,7 @@ import json
 E_ADVISOR_APP = Flask(__name__)
 E_ADVISOR_APP = Flask(__name__)
 chrome_options = webdriver.ChromeOptions()
-#chrome_options.headless = True
+chrome_options.headless = True
 settings = {
        "recentDestinations": [{
             "id": "Save as PDF",
