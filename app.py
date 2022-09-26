@@ -23,10 +23,22 @@ import math
 
 import pandas as pd
 import json
+class ReverseProxied(object):
+
+    def __init__(self, E_ADVISOR_APP):
+            self.E_ADVISOR_APP = E_ADVISOR_APP
+
+    def __call__(self, environ, start_response):
+            # if one of x_forwarded or preferred_url is https, prefer it.
+            forwarded_scheme = environ.get("HTTP_X_FORWARDED_PROTO", None)
+            preferred_scheme = E_ADVISOR_APP.config.get("PREFERRED_URL_SCHEME", None)
+            if "https" in [forwarded_scheme, preferred_scheme]:
+                environ["wsgi.url_scheme"] = "https"
+            return self.E_ADVISOR_APP(environ, start_response)
 E_ADVISOR_APP = Flask(__name__)
-E_ADVISOR_APP = Flask(__name__)
+E_ADVISOR_APP.wsgi_app = ReverseProxied(E_ADVISOR_APP.wsgi_app)
 chrome_options = webdriver.ChromeOptions()
-chrome_options.headless = True
+#chrome_options.headless = True
 settings = {
        "recentDestinations": [{
             "id": "Save as PDF",
