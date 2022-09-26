@@ -2035,6 +2035,8 @@ if __name__ == "__main__":
 
 #    E_ADVISOR_APP.config['UPLOAD_FOLDER']
     E_ADVISOR_APP.static_folder = 'static'
+    E_ADVISOR_APP.run( host='0.0.0.0', port=os.environ.get('PORT', '1245') )
 
 #    session(E_ADVISOR_APP)
-    E_ADVISOR_APP.run( port=1245 )
+#
+    #E_ADVISOR_APP.run( port=1245 )
