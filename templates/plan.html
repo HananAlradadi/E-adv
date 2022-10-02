@@ -1,0 +1,74 @@
+<main id="main" class="main">
+<section class="col-lg-8">
+
+        <div class="pagetitle">
+
+<h1 style="text-align: center;">الخطة الدراسية المقترحة</h1>
+    </div>
+
+</section>
+                          {% if plan |length ==0 %}
+          <section class="section">
+        <div class="row">
+          <div class="col-lg-8">
+
+            <div class="card text-center" >
+              <div class="card-body" style="height: 300px">
+<div class="pagetitle" style="padding-top: 15%">
+                      <h1 style="text-align: center;">  انت خريج الفصل الحالي</h1>
+                  <h1 style="text-align: center;"> :) مبارك تخرجك </h1>
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+                      {% endif %}
+
+      {% for Clevel in plan %}
+
+      <section class="section">
+        <div class="row">
+          <div class="col-lg-8">
+
+            <div class="card text-center" >
+              <div class="card-body">
+                <h5 class="card-title">  المستوى {{loop.index }} </h5>
+                <!-- Default Table -->
+
+                <table style="direction: rtl;" class=" table table-striped table-primary table-hover " >
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">المقرر</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <tr>
+                       {% for level in Clevel  %}
+                      <td scope="row">{{loop.index }}</td>
+
+                    
+                                   <td>
+
+
+{{level}}
+            </td>
+</tr>
+
+ {% endfor %}
+                  </tbody>
+                </table>
+
+                <!-- End Default Table Example -->
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    {% endfor %}
+
+</main>

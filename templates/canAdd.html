@@ -1,0 +1,108 @@
+<button type="button" id='add' class="btn btn-primary" data-bs-toggle="modal"
+data-bs-target="#exampleModal">
+اضافة الجدول
+</button>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal2">
+التواصل مع المرشد من اجل اضافة الجدول
+</button>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel" style="padding-left: 45%;
+color: rgba(220,53,69,.9);
+font-size: 42px;"> تنبيه </h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+ قد يتم لا اضافة احدى المقررات نظرا لامتلاء 
+الشعبة
+لاحدى المقررات او جميعها قبل التمكن من اضافته
+
+<br>
+<br>
+
+<label class="form-check-label" for="flexCheckDefault" id='check'>
+  اتعهد انا صاحب الطلب بتحمل المسؤولية
+</label>
+<input onchange="disabledButton()" class="form-check-input" type="checkbox" value=""
+  id="defaultCheck1">
+
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+  الغاء</button>
+
+<button type="submit" formaction="{{ url_for('addr')}}" class="btn btn-primary" id='ok' disabled> اضافة الجدول </button>
+
+</div>
+</div>
+</div>
+</div>
+<!-- model 2 -->
+<div class="modal" id="myModal2">
+<div class="modal-dialog">
+<div class="modal-content">
+
+<!-- Modal Header -->
+<div class="modal-header">
+<h4 class="modal-title">التواصل مع المرشد</h4>
+<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<!-- Modal body -->
+<div style=" direction: rtl;
+text-align: right; " class="modal-body">
+
+  الرقم السري لايميل الجامعي 
+
+    <input id='password' style="text-align: right; width: 40%;  margin-top: 20px;
+    margin-bottom: 20px;"
+    class="form-control me-1 form-input  form-control-sm" type="password" name="userpassword" required> >
+التواصل مع المرشد الاكاديمي عن طريق  :
+<div class="md-3 position-relative" style="text-align: right;">
+
+  <div class="form-check" style="    margin-top: 20px;
+  margin-bottom: 20px;">
+    <label style="display: inline;
+  padding-left: 0;
+  padding-right: 21px;" class="form-check-label " for="validationFormCheck2">الايميل الجامعي
+      <input checked style="float: right;" type="radio" class="form-check-input" id="validationFormCheck2" value="الايميل الجامعي"
+        name="radio-stacked" required>
+    </label>
+  </div>
+
+<div class="form-check" style="margin-top: 20px">
+
+  <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+    for="validationFormCheck4">خدمتك طلب حذف واضافة
+    <input type="radio" class="form-check-input" id="validationFormCheck4" style="float: right;"
+      name="radio-stacked" value="خدمتك طلب حذف واضافة" required>
+  </label>
+</div>
+<div class="form-check" style="margin-top: 20px;">
+
+  <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+    for="validationFormCheck">خدمتك التواصل مع المرشد
+    <input type="radio" class="form-check-input" id="validationFormCheck" style="float: right;"
+      name="radio-stacked" value="خدمتك التواصل مع المرشد" required>
+  </label>
+</div>
+
+</div>
+
+<!-- Modal footer -->
+<div class="modal-footer">
+<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+  الغاء</button>
+<button type="submit" formaction="{{ url_for('contADV')}}" class="btn btn-primary"> ارسال </button>
+</div>
+</form>
+</div>
+</div>
+</div>

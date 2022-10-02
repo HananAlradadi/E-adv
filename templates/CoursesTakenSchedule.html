@@ -1,0 +1,215 @@
+<style xmlns="http://www.w3.org/1999/html">
+   @media (min-width: 1200px) {
+
+#main,
+#footer {
+  margin-left: 50px;
+}
+}
+  </style>
+<main id="main" class="main">
+
+
+   
+
+
+            <div class="row"  >
+
+              <div class=" col-12" >
+                
+    
+      <div class="pagetitle">
+<h1 style="text-align: center;">اكمال الجدول</h1>
+  </div>
+
+                <div class="card text-center  border-primary ">
+                      <div class="card-body ">
+              <h5 class="card-title"></h5>
+<form   method="post">
+              <!--style="text-align: right; display: contents;"-->
+              <div class="position-relative align-items-center" style="text-align: right;display: contents;">
+               
+
+              <div class="form-check form-check-inline">
+
+                <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+                  for="validationFormCheck445">الشعب المتعارضة
+                  <input type="radio" class="form-check-input" id="validationFormCheck445" style="float: right;"
+                    name="radio-stacked1" value="الشعب المتعارضة" >
+                </label>
+              </div>
+              <div class="form-check form-check-inline justify-content-center">
+
+                <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+                  for="validationFormCheck3"> الشعب الغير متعارضة 
+                  <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked1"
+                    style="float: right;" value="الشعب الغير متعارضة" checked>
+                </label>
+
+
+
+            </div>
+ </div>
+              <br>
+              <br>
+    <div class="table-responsive" style="direction: rtl;">
+                          <table id = 'myTable' class=" table table-striped table-primary table-hover " style="direction: rtl;">
+                              <thead>
+
+                              </thead>
+                            <tbody>
+
+                                </tbody>
+                          </table>
+        <input type="hidden" id = 'cr' value="" name="cr">
+        <input type="hidden" id = 'sh' value="" name= 'sh'>
+        <input type="hidden" id = 'crd' value="" name="crd">
+                          </div>
+
+                      <button type="button" id='add' class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        اضافة الجدول
+                      </button>
+    {% if isStu is sameas true %}
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal2">
+                        التواصل مع المرشد من اجل اضافة الجدول
+                      </button>
+{% endif %}
+
+
+                </div>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" style="padding-left: 45%;
+                        color: rgba(220,53,69,.9);
+                        font-size: 42px;"> تنبيه </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body" >
+                          <div id = 'ms1'>
+                        سيتم حذف الجدول الدراسي الموجود في موقع الجامعة واضافة الجدول المختار ولكن قد يتم امتلاء احد
+                        الشعب
+                        لاحدى المقررات او جميعها قبل التمكن من اضافته
+                          </div>
+                        <br>
+                        <br>
+
+                        <label class="form-check-label" for="flexCheckDefault" id='check'>
+                          اتعهد انا صاحب الطلب بتحمل المسؤولية
+                        </label>
+                        <input onchange="disabledButton()" class="form-check-input" type="checkbox" value=""
+                          id="defaultCheck1">
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                          الغاء</button>
+
+                        <button type="submit" formaction="{{ url_for('completionSchedule')}}" class="btn btn-primary" id='ok' disabled> اضافة الجدول </button>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- model 2 -->
+                <div class="modal" id="myModal2">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">التواصل مع المرشد</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div style=" direction: rtl;
+                        text-align: right; " class="modal-body">
+
+                          الرقم السري لايميل الجامعي
+
+                            <input id='password' style="text-align: right; width: 40%;  margin-top: 20px;
+                            margin-bottom: 20px;"
+                            class="form-control me-1 form-input  form-control-sm" type="password" name="userpassword" required>
+                       التواصل مع المرشد الاكاديمي عن طريق  :
+                        <div class="md-3 position-relative" style="text-align: right;">
+
+                          <div class="form-check" style="    margin-top: 20px;
+                          margin-bottom: 20px;">
+                            <label style="display: inline;
+                          padding-left: 0;
+                          padding-right: 21px;" class="form-check-label " for="validationFormCheck2">الايميل الجامعي
+                              <input checked style="float: right;" type="radio" class="form-check-input" id="validationFormCheck2" value="الايميل الجامعي"
+                                name="radio-stacked" required>
+                            </label>
+                          </div>
+
+                        <div class="form-check" style="margin-top: 20px">
+
+                          <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+                            for="validationFormCheck4">خدمتك طلب حذف واضافة
+                            <input type="radio" class="form-check-input" id="validationFormCheck4" style="float: right;"
+                              name="radio-stacked" value="خدمتك طلب حذف واضافة" required>
+                          </label>
+                        </div>
+                        <div class="form-check" style="margin-top: 20px;">
+
+                          <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+                            for="validationFormCheck">خدمتك التواصل مع المرشد
+                            <input type="radio" class="form-check-input" id="validationFormCheck" style="float: right;"
+                              name="radio-stacked" value="خدمتك التواصل مع المرشد" required>
+                          </label>
+                        </div>
+
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                          الغاء</button>
+                        <button type="submit" formaction="{{ url_for('completionSchedule')}}" class="btn btn-primary"> ارسال </button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <!-- End Default Table Example -->
+                 </form>
+              </div>
+
+</div>
+</div>
+</div>
+    </div>
+<p id = 're' class="h1 card-title"></p>
+
+</div>
+</div>
+</div>
+</div>
+</main>
+ <script>
+mes1 = '{{message1 | safe}}'
+mes = '{{message | safe}}'
+    max = {{maxC| safe}}
+    reg = {{regC| safe}}
+    coursesData = {{CoursesCanTaken | safe}}
+    coursesDataTable = coursesData
+    columnsData = {{columnsCoursesCanTaken | safe}}
+    coursesDatanot = {{CoursesCannotTaken | safe}}
+    columnsDatanot = {{columnsCoursesCannotTaken | safe}}
+    avlAddDreap = ({{avlbelAddDreap | safe}} ) ;
+
+    
+ </script>
+  <script type="text/javascript" src="{{ url_for('static',filename='CoursesTakenSchedule.js') }}">
+
+         </script>
+  
+    </main>

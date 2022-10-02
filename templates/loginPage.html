@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>E-ADVISOR</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link rel="stylesheet" href= {{ url_for('static',filename='loginstyle.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/bootstrap/css/bootstrap.min.css') }}>
+<link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/boxicons/css/boxicons.min.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/quill/quill.snow.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/quill/quill.bubble.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/remixicon/remixicon.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/vendor/simple-datatables/style.css') }}>
+  <link rel="stylesheet" href= {{ url_for('static',filename='/assets/css/style.css') }}>
+
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.3.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <div id="navbar">
+    <div id="webname">
+        <a style="display: inline;" href="index.html"><img src="images/logo1.png" style=" display: inline;" width="42" height="45" ></a>
+    </div>
+    <span style="display:inline; float:left; color: rgb(36, 46, 156); padding-left: 9px; padding-top: 17px; font-size: 19px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><span style="color:rgb(54, 124, 159);">E-</span>ADVISOR</span>
+    
+</div>
+  <!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <!-- End Sidebar-->
+  <div class="web_def">
+    <div class="Child">
+    
+    <p style="color: rgb(30, 6, 55);"> هل انت طالب متعثر وتعاني من مشاكل بإعداد جدولك واختيار المواد التي تريد دراستها؟
+      هل انت مرشد وتعاني من اعداد جدول وخطة دراسية للطلاب و عمل الإحصائيات لمقررات الفصل القادم؟
+      اهلًا بك، فقط ادخل بياناتك في الخدمات الأكاديمية وسوف نساعدك في حل مشاكلك بكل سهوله وبأقل وقت</p>
+    </div>
+    </div>
+
+<main id="main" class="main">
+
+    <div class="pagetitle col-lg-8">
+      <h1 style="text-align: center;">تسجيل الدخول</h1>
+
+    </div><!-- End Page Title -->
+
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-8">
+
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title" style="color: rgb(220 53 69 / 90%)"> رقم المستخدم و كلمة السر المطلوبة يجب ان تطابق
+                بيانات الدخول لبوابة النظام الأكاديمي</h5>
+              <!-- Default Table -->
+
+              <form action="/" method="POST" class="needs-validation" novalidate onsubmit="return loding()">
+
+                <div class="md-3 position-relative" style="text-align: right;">
+                  <label for="validationTooltipUsername" class="form-label">رقم المستخدم</label>
+                  <br>
+                  <div class="input-group has-validation">
+
+                    <input style=" text-align: right;" type="number" class="form-control" id="validationTooltipUsername"
+                      aria-describedby="validationTooltipUsernamePrepend" required name="username">
+                    <div class="invalid-tooltip">
+                      .لا يمكن ترك حقل رقم المستخدم فارغاً
+                    </div>
+                  </div>
+                  <br>
+                </div>
+                <div class="md-3 position-relative" style=" text-align: right;">
+                  <label for="validationTooltipUsername" class="form-label">كلمة المرور</label>
+                  <div class="input-group has-validation">
+
+                    <input style="direction: rtl;
+                    text-align: right;" type="password" class="form-control" id="validationTooltipUsername"
+                      aria-describedby="validationTooltipUsernamePrepend" required name="userpassword">
+                    <div class="invalid-tooltip">
+                      لا يمكن ترك حقل كلمة المرور فارغاً
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="md-3 position-relative" style=" text-align: right;">
+                  <label for="validationTooltipUsername" class="form-label">هل انت؟</label>
+                </div>
+                <div class="md-3 position-relative" style="text-align: right;">
+                  <div class="form-check">
+                    <label style="display: inline;
+                  padding-left: 0;
+                  padding-right: 21px;" class="form-check-label " for="validationFormCheck2">طالب
+                      <input style="float: right;" type="radio" class="form-check-input" id="validationFormCheck2" value="طالب"
+                        name="radio-stacked" required>
+                    </label>
+                  </div>
+
+                <div class="form-check">
+
+                  <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+                    for="validationFormCheck4">مرشد
+                    <input type="radio" class="form-check-input" id="validationFormCheck4" style="float: right;"
+                      name="radio-stacked" value="مرشد" required>
+                  </label>
+                </div>
+                <div class="form-check mb-3">
+
+                  <label style="padding-left: 0; padding-right: 21px; display: inline" class="form-check-label"
+                    for="validationFormCheck3">لجنة ارشاد
+                    <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked"
+                      style="float: right;" value="لجنه الارشاد" required>
+                  </label>
+                  <div class="invalid-feedback">fff</div>
+                </div>
+
+
+              </div>
+            <br>
+            <div class="d-grid gap-2 col-6 mx-auto" style="align-content: conter">
+              <button style="direction: rtl;" class="btn btn-primary" type="submit">تسجيل الدخول</button>
+              <p style="color: rgb(220 53 69 / 90%)"> {{ error_message }}</p>
+            </div>
+
+              </form>
+
+<script>
+  function loding(){
+ button =  document.getElementsByTagName('button')[0]
+ let allAreFilled = true;
+  document.getElementsByTagName('form')[0].querySelectorAll("[required]").forEach(function(i) {
+    if (i.type === "radio") {
+      let radioValueCheck = false;
+document.getElementsByTagName('form')[0].querySelectorAll(`[name=${i.name}]`).forEach(function(r) {
+        if (r.checked) radioValueCheck = true;
+      })
+      allAreFilled = radioValueCheck;
+
+    }
+    if (!i.value) { allAreFilled = false; }
+  })
+
+ if (allAreFilled){
+
+ button.innerHTML  = '<span  class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري تسجيل الدخول.....'
+ button.setAttribute("disabled", "disabled")
+
+return true
+}
+
+return false
+  }
+</script>
+
+              <!-- End Default Table Example -->
+            </div>
+            </div>
+          </div>
+    </section>
+
+  </main>
+  <!-- ======= Footer ======= -->
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/chart.js/chart.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/echarts/quill.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/quil/echarts.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/tinymce/tinymce.min.j') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static',filename='/assets/vendor/php-email-form/validate.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='/assets/js/bootstrap-datetimepicker.js') }}"></script>
+
+<script>
+    // Self-executing function
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+</body>
+
+</html>

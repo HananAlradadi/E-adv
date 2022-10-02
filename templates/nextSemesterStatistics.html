@@ -1,0 +1,168 @@
+{% extends 'navBarAdv.html' %}
+ {% block body %}
+
+
+<section class="col-lg-8">
+
+        <div class="pagetitle">
+ <h1 style="text-align: center;">احصائيات الفصل القادم</h1>
+    </div>
+
+</section>
+<div class="section-container">
+            <div class="container">
+              <div class="row" style="direction: rtl;">
+                <div class="col-12">
+                    <div class="card text-center  border-primary justify-content-center">
+                        <div class="card-body ">
+                <h5 class="card-title"></h5>
+
+          <div class="row ">
+ <div class="d-grid gap-2 d-md-block">
+  <button style="margin-right: -83%;" onclick="download_table_as_csv('myTable')" class="btn btn-primary" type="button">تحميل</button>
+
+                                </div>
+                  <div class="col" style="direction: ltr; align-items: center;">
+                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width: 50% ; margin-top: -5%; margin-left: 30%;">
+                      <option style="text-align: center;" selected>احصائيات الفصل الدراسي القادم</option>
+                      <option style="text-align: center;" >احصائيات خريجين الفصل الدراسي القادم</option>
+
+                    </select>
+
+</div>
+
+                </div>
+                                                        <div class="table-responsive" style="direction: rtl;">
+                            <table id = 'myTable' class=" table table-striped table-primary table-hover " style="direction: rtl;">
+                                <thead>
+
+                                    <tr>
+
+
+
+         <th scope="col"> # </th>
+                                        <th scope="col"> المقرر </th>
+                                        <th scope="col"> عدد الطلاب </th>
+
+
+                                </tr>
+                                </thead>
+ {% for row in StatisticTable %}
+    <tr>
+ <th scope="row">{{loop.index }}</th>
+    {% for cloum in row %}
+
+            <td>
+
+{{cloum}}
+            </td>
+
+
+        {% endfor %}
+
+    </tr>
+    {% endfor %}
+
+
+
+                                  </tbody>
+                            </table>
+                            </div>
+
+</div>
+
+
+
+                            <!-- Default Table -->
+
+                        </div>
+                            <!-- End Default Table Example -->
+                        </div>
+                    </div>
+        </section>
+
+
+    <script type="text/javascript">
+	function download_table_as_csv(table_id, separator = ',') {
+    // Select rows from table_id
+    var rows = document.querySelectorAll('table#' + table_id + ' tr');
+    // Construct csv
+    var csv = [];
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll('td, th');
+        for (var j = 0; j < cols.length; j++) {
+            // Clean innertext to remove multiple spaces and jumpline (break csv)
+            var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+            // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+            data = data.replace(/"/g, '""');
+            // Push escaped string
+            row.push('"' + data + '"');
+        }
+        csv.push(row.join(separator));
+    }
+    var csv_string = csv.join('\n');
+    // Download it
+    var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
+    var link = document.createElement('a');
+    link.style.display = 'none';
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+</script>
+
+<script>
+IDSOfGraduateStudents = {{IDSOfGraduateStudents | safe}}
+remainingCoursesForGraduateStudents = {{remainingCoursesForGraduateStudents | safe}}
+StatisticTable= {{StatisticTable | safe}}
+specializationElectivesCoursesName = {{specializationElectivesCoursesName| safe}}
+document.getElementsByTagName('select')[0].addEventListener('change', function (evant){
+    var fTable = evant.target.value
+
+    var table = document.getElementById("myTable").getElementsByTagName('tbody')[0]
+
+if (fTable == 'احصائيات الفصل الدراسي القادم'){
+var heads = document.getElementById("myTable").getElementsByTagName('thead')[0]
+heads.innerHTML = '<tr><th scope="col"> # </th><th scope="col"> المقرر </th><th scope="col"> عدد الطلاب </th></tr>'
+rows  = ''
+for (i = 0  ; i < StatisticTable.length; i++){
+
+    rows += '<tr><td>' + (i+1) +'</td><td>' + StatisticTable[i][0] + '</td><td>' + StatisticTable[i][1]+ '</td> </tr>';
+}
+
+}
+else {
+    rows = "";
+var table = document.getElementById("myTable").getElementsByTagName('tbody')[0]
+var heads = document.getElementById("myTable").getElementsByTagName('thead')[0]
+heads.innerHTML = '<tr><th scope="col"> # </th><th scope="col"> الرقم الجامعي</th><th scope="col"> المقررات المتبقية </th><th scope="col"> مقررات اختياري تخصص التي اجتازها الطالب</th></tr>'
+
+
+    for (i = 0  ; i < IDSOfGraduateStudents.length; i++){
+   remainingCourses = ''
+   remainingCoursesspecializationCoursesNames = ''
+ for (j = 0  ; j < remainingCoursesForGraduateStudents[i].length; j++){
+  remainingCourses += remainingCoursesForGraduateStudents[i][j] + ", "
+
+}
+
+ for (k = 0  ; k < specializationElectivesCoursesName[i].length; k++){
+   remainingCoursesspecializationCoursesNames +=  specializationElectivesCoursesName[i][k] + ", "
+
+}
+    rows += '<tr><td>' + (i+1) + '</td><td>' + IDSOfGraduateStudents[i] + '</td><td>' + remainingCourses  + '</td>'+'<td>' +  remainingCoursesspecializationCoursesNames + '</td> </tr>';
+
+
+  }
+
+}
+table.innerHTML = rows
+});
+
+</script>
+    </main>
+  {% endblock %}
