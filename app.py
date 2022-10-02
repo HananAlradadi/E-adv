@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
-from jedi.plugins import flask
+
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from selenium.webdriver import ActionChains
