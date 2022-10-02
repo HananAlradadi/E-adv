@@ -2157,7 +2157,7 @@ if __name__ == "__main__":
 
 #    E_ADVISOR_APP.config['UPLOAD_FOLDER']
     E_ADVISOR_APP.static_folder = 'static'
-
+    port = int(os.environ.get("PORT", 5000))
+    E_ADVISOR_APP.run(host='0.0.0.0', port=port)
 #    session(E_ADVISOR_APP)
-    E_ADVISOR_APP.config.update(dict(PREFERRED_URL_SCHEME='https'))
-    E_ADVISOR_APP.run( port=1245 )
+
