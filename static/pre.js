@@ -1,23 +1,13 @@
 
 $('select').change(function(){
    var index = $('option:selected',this).index()-1;
-    var table = document.getElementById("myTable");
+    var table = document.getElementById("myTable").getElementsByTagName('tbody')[0]
 
-  for (i = table.rows.length-1 ; i >= 1  ; i-- ){
-     table.deleteRow(i);
-  }
+  rows = "";
   for (i = 0 ; i < prerequsets[index].length ; i++){
-    var row = table.insertRow(i+1);
-  var cell1 = row.insertCell(0);
-  var cell2 = row.insertCell(1);
-  cell1.innerHTML = i+1;
-  cell2.innerHTML = prerequsets[index][i] ;
+    rows += '<tr><td>' + (i+1) + '</td><td>' + prerequsets[index][i] + '</td> </tr>';
+
 
   }
-
-
-
-
-
-
+  table.innerHTML = rows
 });
