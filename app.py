@@ -1281,7 +1281,7 @@ def loginPage():
                 session['login'] = True
                
                 time.sleep(20)
-                if session.get('user_type') == 'طالب' or session.get('user_type') == 'مرشد'
+                if session.get('user_type') == 'طالب' or session.get('user_type') == 'مرشد' :
                     data_extraction(session.get('user_type'))
                 # and driver.title == 'تقيم المقررات الدراسية' :
                  #   return render_template("loginPage.html", error_message="لابد من اجراء التقيم للمقررات الدراسية في موقع الجامعة اولا")
