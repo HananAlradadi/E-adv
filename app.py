@@ -27,7 +27,7 @@ import json
 
 E_ADVISOR_APP = Flask(__name__)
 chrome_options = webdriver.ChromeOptions()
-chrome_options.headless = True
+#chrome_options.headless = True
 class ReverseProxied(object):
 
     def __init__(self, E_ADVISOR_APP):
