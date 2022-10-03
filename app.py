@@ -1269,6 +1269,8 @@ def loginPage():
                 if len(driver.find_elements_by_xpath("/html/body/table/tbody/tr[4]/td/table[2]/tbody/tr/td/span")) != 0  or len(driver.find_elements_by_xpath('/html/body/table/tbody/tr[4]/td/table[2]/tbody/tr/td/div[2]/p')) !=0 :
                     return render_template("loginPage.html", error_message="البيانات المدخلة غير صحيحة")
                 #/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/p/table[2]/tbody/tr[6]/td[1]
+                if session.get('user_type') == 'طالب' :
+                    driver.get('https://eas.taibahu.edu.sa/TaibahReg/studentBasicData.do?ex=preEx')
                 if session.get('user_type') == 'طالب' and 'بكالوريوس' in driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/p/table[2]/tbody/tr[6]/td[1]').text :
                     return render_template("loginPage.html", error_message="الخدمات غير متاحه للخريجين")
                 if session.get('user_type') == 'طالب' and driver.title == 'تقيم المقررات الدراسية' :
