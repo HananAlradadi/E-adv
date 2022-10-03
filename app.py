@@ -1279,10 +1279,11 @@ def loginPage():
                     return render_template("loginPage.html", error_message="لابد من اجراء التقيم للمقررات الدراسية في موقع الجامعة اولا")
 
                 session['login'] = True
-                print('****************888')
+               
                 time.sleep(20)
-                data_extraction(session.get('user_type'))
-                #if session.get('user_type') == 'طالب' and driver.title == 'تقيم المقررات الدراسية' :
+                if session.get('user_type') == 'طالب' or session.get('user_type') == 'مرشد'
+                    data_extraction(session.get('user_type'))
+                # and driver.title == 'تقيم المقررات الدراسية' :
                  #   return render_template("loginPage.html", error_message="لابد من اجراء التقيم للمقررات الدراسية في موقع الجامعة اولا")
 
                 return redirect('home')
