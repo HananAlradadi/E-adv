@@ -66,6 +66,8 @@ def login(AS_USERNAME , AS_PASSWORD , user_type):
     driver.find_element_by_xpath('/html/body/table/tbody/tr[4]/td/table[1]/tbody/tr[2]/td/form/table/tbody/tr[2]/td[2]/input').send_keys(AS_USERNAME)
     driver.find_element_by_xpath('/html/body/table/tbody/tr[4]/td/table[1]/tbody/tr[2]/td/form/table/tbody/tr[3]/td[2]/input').send_keys(AS_PASSWORD)
     driver.find_element_by_xpath('/html/body/table/tbody/tr[4]/td/table[1]/tbody/tr[2]/td/form/table/tbody/tr[4]/td[2]/div/input[1]').click()
+    if session.get('user_type') == 'طالب' and session.get('login'):
+        driver.get('https://eas.taibahu.edu.sa/TaibahReg/studentBasicData.do?ex=preEx')
 def transcript_extraction ():
     transcript = driver.page_source
     soup = BeautifulSoup(transcript, "lxml")
@@ -1365,7 +1367,7 @@ def listOfStudentName():
     elif session.get('login') :
         return redirect('home')
     return redirect('/')
-@E_ADVISOR_APP.route('/StatisticForNextSemester')
+@E_ADVISOR_APP.route('/StatisticForNextSemesterStudents')
 def StatisticForNextSemesterStudents():
     if session.get('login') and session.get('user_type') == 'مرشد' or session.get('user_type') == 'لجنة ارشاد' :
         StatisticTable = pd.read_csv('aa.csv', usecols=['أسم المادة'])
