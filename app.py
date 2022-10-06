@@ -12,7 +12,6 @@ from pathlib import Path
 import numpy as np
 import pandas
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
-from jedi.plugins import flask
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from selenium.webdriver import ActionChains
@@ -2209,6 +2208,7 @@ if __name__ == "__main__":
 
 #    session(E_ADVISOR_APP)
     E_ADVISOR_APP.config.update(dict(PREFERRED_URL_SCHEME='https'))
-    E_ADVISOR_APP.run( port=1245 )
+    port = int(os.environ.get("PORT", 5000))
+    E_ADVISOR_APP.run(host='0.0.0.0', port=port)
     #port = int(os.environ.get("PORT", 5000))
     #E_ADVISOR_APP.run(host='0.0.0.0', port=port)
