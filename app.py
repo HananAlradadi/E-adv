@@ -69,6 +69,8 @@ def login(AS_USERNAME , AS_PASSWORD , user_type):
     driver.find_element_by_xpath('/html/body/table/tbody/tr[4]/td/table[1]/tbody/tr[2]/td/form/table/tbody/tr[4]/td[2]/div/input[1]').click()
     if session.get('user_type') == 'طالب' and session.get('login'):
         driver.get('https://eas.taibahu.edu.sa/TaibahReg/studentBasicData.do?ex=preEx')
+    print(AS_USERNAME)
+    print(AS_PASSWORD)
 def transcript_extraction ():
     transcript = driver.page_source
     soup = BeautifulSoup(transcript, "lxml")
@@ -321,8 +323,7 @@ def data_extraction(user_type):
         Student_data_extraction()
     elif user_type == 'مرشد':
         advisor_data_extraction()
-    else:
-        HeadOf_data_extraction()
+
 def OptimalPlans(Studentsplan, sm):
         passedCourses = Studentsplan.loc[~(Studentsplan['التقدير'].isna() | Studentsplan['التقدير'].str.contains('F'))]['أسم المادة'].tolist()
         remainingCourses = Studentsplan.loc[Studentsplan['التقدير'].isna() | Studentsplan['التقدير'].str.contains('F')]['أسم المادة'].tolist()
@@ -1279,8 +1280,8 @@ def loginPage():
                     return render_template("loginPage.html", error_message="لابد من اجراء التقيم للمقررات الدراسية في موقع الجامعة اولا")
 
                 session['login'] = True
-
-                data_extraction(session.get('user_type'))
+                if session.get('user_type') == 'طالب' or session.get('user_type') == 'مرشد':
+                    data_extraction(session.get('user_type'))
                 #if session.get('user_type') == 'طالب' and driver.title == 'تقيم المقررات الدراسية' :
                  #   return render_template("loginPage.html", error_message="لابد من اجراء التقيم للمقررات الدراسية في موقع الجامعة اولا")
 
