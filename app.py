@@ -1333,6 +1333,8 @@ def loginPage():
 def home() :
     global gohome
     gohome = False
+    global firstReq
+    firstReq = True
     if True and user_type == 'طالب' :
        return render_template("homePageForSt.html")
     elif session.get('login') and  session.get('user_type') ==  'مرشد' :
