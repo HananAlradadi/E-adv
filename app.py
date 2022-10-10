@@ -2289,7 +2289,7 @@ def foo(response):
     if  path and not firstReq  and not gohome :
 
         time.sleep(10)
-        if request.path == "/"
+        if request.path == "/" :
             return redirect('/')
         else :
             return redirect(url_for('HeadOfTheGuidanceCommitteeServices'))
