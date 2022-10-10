@@ -23,7 +23,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import math
 
 import pandas as pd
-import json
+
 
 E_ADVISOR_APP = Flask(__name__)
 chrome_options = webdriver.ChromeOptions()
