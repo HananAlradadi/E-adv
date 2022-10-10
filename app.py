@@ -31,7 +31,7 @@ E_ADVISOR_APP = Flask(__name__)
 chrome_options = webdriver.ChromeOptions()
 gohome = False
 #chrome_options.headless = True
-'''
+
 class ReverseProxied(object):
 
     def __init__(self, E_ADVISOR_APP):
@@ -44,7 +44,7 @@ class ReverseProxied(object):
             if "https" in [forwarded_scheme, preferred_scheme]:
                 environ["wsgi.url_scheme"] = "https"
             return self.E_ADVISOR_APP(environ, start_response)
-'''
+  
 E_ADVISOR_APP = Flask(__name__)
 shared_var = None
 req_counter = 0
@@ -2286,6 +2286,6 @@ if __name__ == "__main__":
 
 #    session(E_ADVISOR_APP)
     #E_ADVISOR_APP.config.update(dict(PREFERRED_URL_SCHEME='https'))
-    E_ADVISOR_APP.run( port=1245 )
-    #port = int(os.environ.get("PORT", 5000))
-    #E_ADVISOR_APP.run(host='0.0.0.0', port=port)
+    #E_ADVISOR_APP.run( port=1245 )
+    port = int(os.environ.get("PORT", 5000))
+    E_ADVISOR_APP.run(host='0.0.0.0', port=port)
