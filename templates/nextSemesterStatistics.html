@@ -1,7 +1,15 @@
 {% extends 'navBarAdv.html' %}
  {% block body %}
+<style xmlns="http://www.w3.org/1999/html">
+   @media (min-width: 1200px) {
 
-
+#main,
+#footer {
+  margin-left: 50px;
+}
+}
+  </style>
+<main id="main" class="main">
 <section class="col-lg-8">
 
         <div class="pagetitle">
@@ -9,6 +17,7 @@
     </div>
 
 </section>
+
 <div class="section-container">
             <div class="container">
               <div class="row" style="direction: rtl;">
@@ -42,7 +51,9 @@
 
          <th scope="col"> # </th>
                                         <th scope="col"> المقرر </th>
-                                        <th scope="col"> عدد الطلاب </th>
+                                        <th scope="col"> طلاب الكلية </th>
+                                        <th scope="col"> طلاب الزائر </th>
+                                        <th scope="col"> المجموع </th>
 
 
                                 </tr>
@@ -68,6 +79,7 @@
                                   </tbody>
                             </table>
                             </div>
+                            <p id = 're' class="h1 card-title"></p>
 
 </div>
 
@@ -126,16 +138,18 @@ document.getElementsByTagName('select')[0].addEventListener('change', function (
     var table = document.getElementById("myTable").getElementsByTagName('tbody')[0]
 
 if (fTable == 'احصائيات الفصل الدراسي القادم'){
+      document.getElementById('re').innerText = ''
 var heads = document.getElementById("myTable").getElementsByTagName('thead')[0]
-heads.innerHTML = '<tr><th scope="col"> # </th><th scope="col"> المقرر </th><th scope="col"> عدد الطلاب </th></tr>'
+heads.innerHTML = '<tr><th scope="col"> # </th><th scope="col"> المقرر </th><th scope="col"> طلاب الكلية </th> <th scope="col"> طلاب الزائر </th><th scope="col"> المجموع </th></tr>'
 rows  = ''
 for (i = 0  ; i < StatisticTable.length; i++){
 
-    rows += '<tr><td>' + (i+1) +'</td><td>' + StatisticTable[i][0] + '</td><td>' + StatisticTable[i][1]+ '</td> </tr>';
+    rows += '<tr><td>' + (i+1) +'</td><td>' + StatisticTable[i][0] + '</td><td>' + StatisticTable[i][1]+ '</td><td>' + StatisticTable[i][2]+ '</td><td>' + StatisticTable[i][3]+ '</td> </tr>';
 }
-
+table.innerHTML = rows
 }
 else {
+    if (IDSOfGraduateStudents.length > 0){
     rows = "";
 var table = document.getElementById("myTable").getElementsByTagName('tbody')[0]
 var heads = document.getElementById("myTable").getElementsByTagName('thead')[0]
@@ -143,6 +157,7 @@ heads.innerHTML = '<tr><th scope="col"> # </th><th scope="col"> الرقم ال�
 
 
     for (i = 0  ; i < IDSOfGraduateStudents.length; i++){
+
    remainingCourses = ''
    remainingCoursesspecializationCoursesNames = ''
  for (j = 0  ; j < remainingCoursesForGraduateStudents[i].length; j++){
@@ -151,6 +166,7 @@ heads.innerHTML = '<tr><th scope="col"> # </th><th scope="col"> الرقم ال�
 }
 
  for (k = 0  ; k < specializationElectivesCoursesName[i].length; k++){
+
    remainingCoursesspecializationCoursesNames +=  specializationElectivesCoursesName[i][k] + ", "
 
 }
@@ -158,9 +174,18 @@ heads.innerHTML = '<tr><th scope="col"> # </th><th scope="col"> الرقم ال�
 
 
   }
-
+     console.log(rows)
+document.getElementById("myTable").getElementsByTagName('tbody')[0].innerHTML = ''
+    document.getElementById("myTable").getElementsByTagName('tbody')[0].innerHTML = rows
 }
-table.innerHTML = rows
+
+else {
+    document.getElementById('re').innerText = 'لا يوجد طلاب خريجين للفصل القادم'
+    table = document.getElementById('myTable')
+    table.getElementsByTagName('thead')[0].innerHTML = ''
+    table.getElementsByTagName('tbody')[0].innerHTML = ''
+    }
+}
 });
 
 </script>

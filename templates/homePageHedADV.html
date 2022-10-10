@@ -58,7 +58,7 @@
       
     <section></section>
               <div class="col-lg-9">
-      
+         <form onsubmit="return checkFileUplode()" action="{{ url_for('HeadOfTheGuidanceCommitteeServices')}}" method="post" enctype="multipart/form-data">
                 <div class="card text-center" >
                   <div class="card-body"> 
                     <h5 class="card-title">يحتوي على الارقام الجامعية لطلاب الكلية CSV
@@ -79,7 +79,7 @@
                 <p>Drag and drop a file here or click</p>
                 <p id = 'fileName'></p>
               </div>
-              <input type="file" id="File" name="File" class="dropify" data-max-file-size="2M" onchange="validateFileType(this)" accept=".csv">
+              <input required type="file" id="File" name="File" class="dropify" data-max-file-size="2M" onchange="validateFileType(this)" accept=".csv">
 
 
             </div>
@@ -88,16 +88,16 @@
             </div>
             <br>
             <div class="d-grid gap-2 col-6 mx-auto">
-                <form onsubmit="return checkFileUplode()" action="{{ url_for('HeadOfTheGuidanceCommitteeServices')}}" method="post">
+
               <button onclick="checkFileUplode()" class="btn btn-primary" type="submit">الذهاب الى الاحصائيات</button>
-                </form>
+
             <p id = 'Nofile'></p>
             </div>
             </div>
 
               </div>
               </div>
-              
+               </form>
 
                   
                     <!-- End Default Table Example -->
