@@ -1458,6 +1458,11 @@ def listOfStudentName():
 @E_ADVISOR_APP.route('/StatisticForNextSemesterStudents')
 def StatisticForNextSemesterStudents():
     if session.get('login') and session.get('user_type') == 'مرشد' or session.get('user_type') == 'لجنه الارشاد' :
+        if session.get('user_type') == 'لجنه الارشاد' :
+            global gohome
+            gohome = False
+            global firstReq
+            firstReq = True
         StatisticTable = pd.read_csv('aa.csv', usecols=['أسم المادة'])
         StatisticTable['عدد طلاب الكلية'] = 0
         StatisticTable['عدد طلاب الزائر'] = 0
@@ -2037,8 +2042,21 @@ def HeadOfTheGuidanceCommitteeServices():
                 listOfStudenstID = pd.read_csv(listOfStudenstID)
                 listOfStudenstID = listOfStudenstID[listOfStudenstID.columns[0]].values.tolist()
                 login(session.get('AS_USERNAME'), session.get('AS_PASSWORD'), session.get('user_type'))
-                HeadOf_data_extraction()
-                return redirect(url_for('StatisticForNextSemester'))
+                global firstReq
+                firstReq = False
+                global user_type
+                user_type = session.get('user_type')
+                global gohome
+                gohome = False
+                thread = Thread(target=HeadOf_data_extraction)
+                thread.setDaemon(True)
+                thread.start()
+
+        if not gohome and not firstReq:
+                return ('', 204)
+        elif gohome and not firstReq:
+             return redirect(url_for('StatisticForNextSemesterStudents'))
+
             return  redirect(url_for('home'))
     if session.get('login') :
         return redirect(url_for('home'))
@@ -2264,7 +2282,7 @@ def ktmADDRE(CR_NAME,crs,password):
 @E_ADVISOR_APP.after_request
 def foo(response):
     method = request.method == "GET"
-    path = request.path == "/"
+    path = request.path == "/" or request.path == '/HeadOfTheGuidanceCommitteeServices'
 
     #response = Response(__name__)
 
@@ -2272,7 +2290,10 @@ def foo(response):
     if  path and not firstReq  and not gohome :
 
         time.sleep(10)
-        return redirect('/')
+        if request.path == "/"
+            return redirect('/')
+        else :
+            return redirect(url_for('HeadOfTheGuidanceCommitteeServices'))
     return response
 
 
@@ -2288,4 +2309,4 @@ if __name__ == "__main__":
     E_ADVISOR_APP.config.update(dict(PREFERRED_URL_SCHEME='https'))
     #E_ADVISOR_APP.run( port=1245 , threaded = True)
     port = int(os.environ.get("PORT", 5000))
-    E_ADVISOR_APP.run(host='0.0.0.0', port=port)
+    E_ADVISOR_APP.run(host='0.0.0.0', port=port, threaded = True)
