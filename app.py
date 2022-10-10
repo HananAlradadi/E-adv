@@ -2056,8 +2056,7 @@ def HeadOfTheGuidanceCommitteeServices():
                 return ('', 204)
         elif gohome and not firstReq:
              return redirect(url_for('StatisticForNextSemesterStudents'))
-
-            return  redirect(url_for('home'))
+            
     if session.get('login') :
         return redirect(url_for('home'))
     return redirect(url_for('/'))
