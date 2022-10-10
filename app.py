@@ -324,7 +324,7 @@ def HeadOf_data_extraction():
             driver.back()
             driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/form/table/tbody/tr[2]/td/div/input').clear()
 def data_extraction():
-    time.sleep(5)
+    time.sleep(2)
     if user_type == 'طالب':
         Student_data_extraction()
     elif user_type == 'مرشد':
@@ -2271,7 +2271,7 @@ def foo(response):
 
     if  path and not firstReq  and not gohome :
 
-        time.sleep(3)
+        time.sleep(10)
         return redirect('/')
     return response
 
