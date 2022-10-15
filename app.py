@@ -574,8 +574,7 @@ def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
             maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-5]].loc[i]
             remainingCreditsForNextSemesterGraduate = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-4]].loc[i]
             break
-    for i in range(len(passedCourses)):
-        academicPlan.at[(academicPlan[academicPlan['أسم المادة'].str.contains(passedCourses.loc[i, 'أسم المادة'], na=False,regex=False)].index.values), 'اجتاز المقرر'] = True
+    academicPlan.loc[academicPlan['أسم المادة'].isin(passedCourses['أسم المادة']), 'اجتاز المقرر'] = True
     for i in range(len(remainingCourses)):
         academicPlan.at[(academicPlan[
                              academicPlan['سلسلة المتطلبات'].str.contains(remainingCourses.loc[i, "أسم المادة"],
