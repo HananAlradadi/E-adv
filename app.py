@@ -702,7 +702,7 @@ def CoursesTakenSchedule( offeredCourses,nameCoursesCanTaken,maxCredits):
     if len(nameCoursesCanTaken) > 0:
         nameCoursesCanTaken = nameCoursesCanTaken['أسم المادة'].tolist()
         table = []
-        table.append(offeredCourses.loc[(offeredCourses['اسم المادة'].isin(studentSchedule['المادة'])) & (offeredCourses['الشعبة'].isin(studentSchedule['شعبة']))])
+        table.append(pd.merge(offeredCourses, studentSchedule.rename(columns={'المادة': 'اسم المادة', 'شعبة': 'الشعبة'}),on=['اسم المادة', 'الشعبة'], how='inner', indicator=False))
         listofCoursesAndSections = pd.DataFrame(columns=offeredCourses.columns)
         for i in range(len(nameCoursesCanTaken)):
             CoursesSections = offeredCourses.loc[offeredCourses['اسم المادة'].str.contains(nameCoursesCanTaken[i], na=False, regex=False)]
@@ -737,8 +737,7 @@ def CoursesNotTakenSchedule(offeredCourses,nameCoursesCanTaken,maxCredits):
 
         nameCoursesCanTaken = nameCoursesCanTaken['أسم المادة'].tolist()
         table = []
-        table.append(offeredCourses.loc[(offeredCourses['اسم المادة'].isin(studentSchedule['المادة'])) & (
-            offeredCourses['الشعبة'].isin(studentSchedule['شعبة']))])
+        table.append(pd.merge(offeredCourses, studentSchedule.rename(columns={'المادة': 'اسم المادة', 'شعبة': 'الشعبة'}),on=['اسم المادة', 'الشعبة'], how='inner', indicator=False))
         listofCoursesAndSections = []
         for i in range(len(nameCoursesCanTaken)):
             CoursesSections = offeredCourses.loc[offeredCourses['اسم المادة'].str.contains(nameCoursesCanTaken[i], na=False, regex=False)]
