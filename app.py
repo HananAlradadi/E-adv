@@ -989,7 +989,7 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                             tampTable = FindTable(Table, CoursesSections)
                             if len(tampTable )> 0:
                                 UniversityRequirementsName.append(UniversityRequirementsCourses['اسم المادة'].iloc[0])
-                                UniversityRequirementsCourses.drop(index=UniversityRequirementsCourses.index[0], axis=0, nplace=True)
+                                UniversityRequirementsCourses.drop(index=UniversityRequirementsCourses.index[0], axis=0, inplace=True)
                                 Table = tampTable
                                 break
                             UniversityRequirementsCourses.drop(index=UniversityRequirementsCourses.index[0], axis=0,nplace=True)
