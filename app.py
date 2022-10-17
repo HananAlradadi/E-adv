@@ -501,6 +501,7 @@ def FreeElectiveCoursess(offeredCourses, transcripDF):
                                           ~offeredCourses['اسم المادة'].str.contains('اختياري علوم طبيعية', na=False,
                                                                                      regex=False)) & (
                                           ~ offeredCourses['اسم المادة'].isin(transcripDF['أسم المادة']))]
+    freeElective = freeElective.loc[~(freeElective['اسم المادة'].isin(Studentsplan['أسم المادة']))]
     # freeElective = freeElective.loc[(~ freeElective['الشعبة'].str.startswith('I')) & (~ freeElective['الشعبة'].str.endswith('G'))]
     freeElective['lecture time'] = datetime.strptime(("00:00:00"), "%H:%M:%S")
     freeElective = freeElective.reset_index(drop=True)
