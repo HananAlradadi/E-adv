@@ -585,7 +585,7 @@ def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
     offeredCourses = offeredCourses.dropna(how='all', axis=0)
     academicPlan = academicPlan.loc[
         (academicPlan['اجتاز سلسلة المتطلبات'] == True) & (academicPlan['اجتاز المقرر'] == False) & academicPlan[
-            'أسم المادة'].isin(offeredCourses['اسم المادة'])]
+            'أسم المادة'].isin(offeredCourses['اسم المادة']) & (academicPlan['أسم المادة'].isin(Studentsplan['أسم المادة']))]
 
     Studentsleve = academicPlan.loc[academicPlan['اجتاز المقرر'] == False]['المستوى'].min()
     academicPlan['أولية'] = academicPlan['طول سلسلة المتطلبات'] + academicPlan['عدد المواد المتطلبة']
