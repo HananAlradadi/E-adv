@@ -1379,7 +1379,7 @@ def CoursesCanTaken():
             if session.get('user_type') == 'طالب':
              return render_template('CoursesTakenSTAndSH.html', coursesname=CoursesSTCanTaken, max=maxCredits , fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables,fullOffTables=fullOffTables, avlbelAddDreap = avlbelAddDreap , crs = crs)
             if session.get('user_type') == 'مرشد' :
-             return render_template('CoursesTakenScheduleAdv.html', coursesname=CoursesSTCanTaken, max=maxCredits , fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables,fullOffTables=fullOffTables, avlbelAddDreap = avlbelAddDreap , crs = crs)
+             return render_template('CoursesTakenScheduleAdv.html', coursesname=CoursesSTCanTaken, max=maxCredits , fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables,fullOffTables=fullOffTables, avlbelAddDreap = 'false' , crs = crs)
 
         if session.get('user_type') == 'طالب':
             return render_template('CoursesTakenST.html' , coursesname = CoursesSTCanTaken , max = maxCredits , crs = [] )
