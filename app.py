@@ -2358,7 +2358,7 @@ if __name__ == "__main__":
     E_ADVISOR_APP.secret_key = 'super secret key'
     E_ADVISOR_APP.config['SESSION_ TYPE'] = 'filesystem'
 
-    E_ADVISOR_APP.config['UPLOAD_FOLDER']
+    #E_ADVISOR_APP.config['UPLOAD_FOLDER']
     E_ADVISOR_APP.static_folder = 'static'
 
 #    session(E_ADVISOR_APP)
