@@ -55,8 +55,8 @@ coursescanadd()
     
     rowspannum = 1
 
-    while (i+1 < coursesDatanot.length && coursesDatanot[i+1][coursesDatanot[i].length-1][2] == coursesDatanot[i][coursesDatanot[i].length-1][2]  ){
-      row1 = table.insertRow(table.rows.length)
+    while (i+1 < coursesDatanot.length && coursesDatanot[i+1][coursesDatanot[i+1].length-1][2] == coursesDatanot[i][coursesDatanot[i].length-1][2]  ){
+       row1 = table.insertRow(table.rows.length)
 
       time = ''
     for( h = 5 ; h <= 9 ; h++){
