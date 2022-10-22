@@ -2348,7 +2348,7 @@ def foo(response):
 
     if  path and not firstReq  and not gohome :
 
-        time.sleep(30)
+        time.sleep(25)
         return redirect('/')
     return response
 
