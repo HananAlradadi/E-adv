@@ -609,7 +609,7 @@ def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
     academicPlan = academicPlan.reset_index(drop=True)
     CoursesCanTaken = academicPlan.loc[~ ((academicPlan['أسم المادة'].str.contains("مقرر اختياري في التخصص", na=False, regex=False)) | (academicPlan['أسم المادة'].str.contains("مقرر اختياري حر")) | (academicPlan['أسم المادة'].str.contains("متطلب جامعة اختياري")) | (academicPlan['أسم المادة'].str.contains("اختياري علوم طبيعية")))]
     CoursesCanTaken = CoursesCanTaken[['أسم المادة','وحدات معتمدة' , 'أولية']]
-    academicPlan.to_csv('kkkkkkkkkk.csv')
+    
     if academicPlan['أسم المادة'].str.contains("مقرر اختياري في التخصص", na=False, regex=False).sum() > 0:
         specializationElectivesCourses = SpecializationElectivesSpecializationElectives(offeredCourses, transcripDF,remainingCourses, passedCourses)
         specializationElectivesCourses['وحدات معتمدة'] = 3
@@ -621,7 +621,7 @@ def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
         freeElectiveCourses = FreeElectiveCoursess(offeredCourses, transcripDF)
         freeElectiveCourses['وحدات معتمدة'] = 2
         freeElectiveCourses = freeElectiveCourses[['اسم المادة','وحدات معتمدة' ]]
-        freeElectiveCourses.to_csv('xxxxxxxxxxxxxxxxxxxx.csv')
+        
         CoursesCanTaken = pd.concat([CoursesCanTaken, freeElectiveCourses.rename(columns={'اسم المادة': 'أسم المادة'})],axis=0)
     if academicPlan['أسم المادة'].str.contains("متطلب جامعة اختياري").sum() > 0:
         UniversityRequirementsCourses = universityRequirementsCoursess(offeredCourses, transcripDF)
@@ -635,7 +635,7 @@ def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
         SpecializationNaturalsciencesCourse = SpecializationNaturalsciencesCourse[['اسم المادة','وحدات معتمدة']]
         CoursesCanTaken = pd.concat([CoursesCanTaken, SpecializationNaturalsciencesCourse.rename(columns={'اسم المادة': 'أسم المادة'})], axis=0)
     CoursesCanTaken = CoursesCanTaken.drop_duplicates(subset=['أسم المادة'])
-    CoursesCanTaken.to_csv('iiiiiii.csv')
+    
     return CoursesCanTaken
 
 
@@ -917,7 +917,7 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
             academicPlan = academicPlan.sort_values(by=['أولية', 'المستوى', "متوسط درجات سلسله المتطلبات"],ascending=[False, True, False])
 
             academicPlan = academicPlan.reset_index(drop=True)
-            academicPlan.to_csv('ggggggggg.csv')
+            
             registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
             if 'مقرر اختياري في التخصص' in academicPlan['أسم المادة'].iloc[0]:
                 if not haveSpecializationElectives:
