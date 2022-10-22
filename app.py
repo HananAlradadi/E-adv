@@ -31,7 +31,7 @@ E_ADVISOR_APP = Flask(__name__)
 chrome_options = webdriver.ChromeOptions()
 gohome = False
 #chrome_options.headless = True
-
+'''
 class ReverseProxied(object):
 
     def __init__(self, E_ADVISOR_APP):
@@ -44,11 +44,11 @@ class ReverseProxied(object):
             if "https" in [forwarded_scheme, preferred_scheme]:
                 environ["wsgi.url_scheme"] = "https"
             return self.E_ADVISOR_APP(environ, start_response)
-
+'''
 E_ADVISOR_APP = Flask(__name__)
 shared_var = None
 req_counter = 0
-E_ADVISOR_APP.wsgi_app = ReverseProxied(E_ADVISOR_APP.wsgi_app)
+#E_ADVISOR_APP.wsgi_app = ReverseProxied(E_ADVISOR_APP.wsgi_app)
 chrome_options = webdriver.ChromeOptions()
 settings = {
        "recentDestinations": [{
@@ -119,6 +119,8 @@ def Student_data_extraction() :
     global timeTableData
     global semester
     global registerdeCreditsSchedule
+    global major
+    major = driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/p/table[2]/tbody/tr[4]/td[2]').text
     Advisor_Email = driver.find_element_by_xpath("/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/p/table[2]/tbody/tr[9]/td[2]").text
     Student_Email = driver.find_element_by_xpath("/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/p/table[2]/tbody/tr[9]/td[1]").text
     GPA = float(driver.find_element_by_xpath("/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/p/table[2]/tbody/tr[8]/td[2]").text)
@@ -145,10 +147,10 @@ def Student_data_extraction() :
     timeTableData = soup1.findAll("table", {"border": "1"})
 def timeTableDatas() :
         login(session.get('AS_USERNAME'), session.get('AS_PASSWORD'), session.get('user_type'))
+        global avlbelAddDreap
+        avlbelAddDreap = 'true'
         if session.get('user_type') == 'طالب':
          driver.get('https://eas.taibahu.edu.sa/TaibahReg/studentBasicData.do?ex=preEx')
-         global avlbelAddDreap
-         avlbelAddDreap = 'true'
          driver.find_element_by_link_text('عمليات أكاديمية').click()
          driver.find_element_by_link_text('الحذف والاضافة').click()
          if len(driver.find_elements_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/table/tbody/tr/td/p')) > 0:
@@ -157,6 +159,16 @@ def timeTableDatas() :
 
 
         elif session.get('user_type') == 'مرشد':
+
+            driver.find_element_by_link_text('المرشدين الأكاديميين').click()
+
+            driver.find_element_by_link_text('الحذف والاضافة لطالب').click()
+
+            # ادخال معلومات الطالب stdNumber
+            driver.find_element_by_id("stdNumber").send_keys(listOfStudenstID[0])
+            driver.find_element_by_name("send").click()
+            if len(driver.find_elements_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/table/tbody/tr/td/p')) > 0:
+                avlbelAddDreap = 'false'
 
             driver.find_element_by_link_text('المرشدين الأكاديميين').click()
             driver.find_element_by_link_text('مواعيد المقررات لقسم').click()
@@ -191,6 +203,9 @@ def advisor_data_extraction() :
         global semester
         global studentsSchedule
         global studentZARorNot
+        global major
+        major = driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/table/tbody/tr[2]/td[1]').text
+        print(major)
         studentZARorNot = []
         plans = pd.read_csv('aa.csv')
         college = driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]').text
@@ -324,7 +339,7 @@ def HeadOf_data_extraction():
             driver.back()
             driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/table/tbody/tr/td[1]/form/table/tbody/tr[2]/td/div/input').clear()
 def data_extraction():
-    time.sleep(2)
+    time.sleep(5)
     if user_type == 'طالب':
         Student_data_extraction()
     elif user_type == 'مرشد':
@@ -375,11 +390,11 @@ def nextSemesterCourses(passedCourses, remainingCourses, academicPlan):
             for i in range(len(maxCreditsForStudentGPA)):
                 if (semester in maxCreditsForStudentGPA['الفصل الدراسي'].iloc[i]):
                     maxCredits = maxCreditsForStudentGPA['الحد الأعلى من الوحدات المسجلة '].iloc[i]
-                    remainingCreditsForCurrentSemesterGraduate = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-5]].loc[i]
-                    remainingCreditsForNextSemesterGraduate = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-4]].loc[i]
-                    avaCoursesOf4Credits = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-3]].loc[i]
-                    avaCoursesOf3Credits = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-2]].loc[i]
-                    avaCoursesOf2Credits = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-1]].loc[i]
+                    avaCoursesOf4Credits = maxCreditsForStudentGPA['اعلى عدد مقررات  التي وحداتها 4'].loc[i]
+                    avaCoursesOf3Credits = maxCreditsForStudentGPA['اعلى عدد مقررات  التي وحداتها 3'].loc[i]
+                    avaCoursesOf2Credits = maxCreditsForStudentGPA['اعلى عدد مقررات  التي وحداتها 2'].loc[i]
+                    remainingCreditsForCurrentSemesterGraduate = maxCreditsForStudentGPA['الحد الأعلى من الوحدات المسجلة  لخريج الفصل الحالي'].loc[i]
+                    remainingForGPNextSum = maxCreditsForStudentGPA['الحد الأعلى من الوحدات المتبقية لاخذ مشروع التخرج الفصل القادم'].loc[i]
                     break
             passGraduationProject1 = "مشروع التخرج(1)" not in remainingCourses
             isRemingGraduationProject1 = "مشروع التخرج(1)" in passedCourses
@@ -407,14 +422,17 @@ def nextSemesterCourses(passedCourses, remainingCourses, academicPlan):
             else:
                 for i in range(len(remainingCourses)):
                     academicPlan.at[(academicPlan[academicPlan['سلسلة المتطلبات'].str.contains(remainingCourses[i], na=False,regex=False)].index.values), 'اجتاز سلسلة المتطلبات'] = False
-
-
-                academicPlan = academicPlan.loc[(academicPlan['اجتاز سلسلة المتطلبات'] == True) & (academicPlan['اجتاز المقرر'] == False)]
+                academicPlan = academicPlan.loc[ (academicPlan['اجتاز سلسلة المتطلبات'] == True) & (academicPlan['اجتاز المقرر'] == False) ]
+                remainingCredits = academicPlan['وحدات معتمدة'].sum()
                 academicPlan['أولية'] = academicPlan['طول سلسلة المتطلبات'] + academicPlan['عدد المواد المتطلبة']
                 academicPlan.loc[academicPlan['المستوى'] == Studentsleve, 'أولية'] = academicPlan['أولية'] + 1
+                academicPlan.loc[academicPlan['المستوى'] <= (Studentsleve + 1), 'أولية'] = academicPlan['أولية'] + 1
                 academicPlan.loc[academicPlan['المستوى'] <= (Studentsleve + 2), 'أولية'] = academicPlan['أولية'] + 1
-                academicPlan.loc[academicPlan['هل لها متطلب المستوى التالي'] == True, 'أولية'] = academicPlan[
-                                                                                                     'أولية'] + 1
+                academicPlan.loc[academicPlan['المستوى'] <= (Studentsleve + 3), 'أولية'] = academicPlan['أولية'] + 1
+                academicPlan.loc[academicPlan['هل لها متطلب المستوى التالي'] == True, 'أولية'] = academicPlan['أولية'] + 1
+                if remainingCredits - maxCredits <= remainingForGPNextSum:
+                    maxpre = academicPlan['أولية'].max()
+                    academicPlan.loc[academicPlan['متطلب لمشروع التخرج'] == True, 'أولية'] = maxpre + 1
                 academicPlan = academicPlan.reset_index(drop=True)
                 academicPlan = academicPlan.sort_values(by=['أولية', 'المستوى'], ascending=[False, True])
 
@@ -492,15 +510,7 @@ def universityRequirementsCoursess(offeredCourses, transcripDF):
         universityRequirements = universityRequirements.reset_index(drop=True)
         return universityRequirements
 def FreeElectiveCoursess(offeredCourses, transcripDF):
-    freeElective = offeredCourses.loc[(offeredCourses['الشعبة'].isin(offeredCourses['الشعبة'].loc[
-                                                                         offeredCourses['اسم المادة'].str.contains(
-                                                                             'مقرر اختياري حر', na=False,
-                                                                             regex=False)].tolist())) & (
-                                          ~offeredCourses['اسم المادة'].str.contains('مقرر اختياري حر', na=False,
-                                                                                     regex=False)) & (
-                                          ~offeredCourses['اسم المادة'].str.contains('اختياري علوم طبيعية', na=False,
-                                                                                     regex=False)) & (
-                                          ~ offeredCourses['اسم المادة'].isin(transcripDF['أسم المادة']))]
+    freeElective = offeredCourses.loc[(offeredCourses['الشعبة'].isin(offeredCourses['الشعبة'].loc[ offeredCourses['اسم المادة'].str.contains( 'مقرر اختياري حر', na=False,  regex=False)].tolist())) & (  ~offeredCourses['اسم المادة'].str.contains('مقرر اختياري حر', na=False,  regex=False)) & ( ~offeredCourses['اسم المادة'].str.contains('اختياري علوم طبيعية', na=False, regex=False)) & ( ~ offeredCourses['اسم المادة'].isin(transcripDF['أسم المادة']))]
     freeElective = freeElective.loc[~(freeElective['اسم المادة'].isin(Studentsplan['أسم المادة']))]
     # freeElective = freeElective.loc[(~ freeElective['الشعبة'].str.startswith('I')) & (~ freeElective['الشعبة'].str.endswith('G'))]
     freeElective['lecture time'] = datetime.strptime(("00:00:00"), "%H:%M:%S")
@@ -557,12 +567,9 @@ def SpecializationElectivesSpecializationElectives(offeredCourses, transcripDF, 
 
 def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
     academicPlan = pd.read_csv('aa.csv')
-    passedCourses = Studentsplan.loc[~ (
-                (Studentsplan['التقدير'].str.contains('F')) | (Studentsplan['التقدير'].str.contains('مسجل')) | (
-            Studentsplan['التقدير'].isna()))]
-    remainingCourses = Studentsplan.loc[(
-                (Studentsplan['التقدير'].str.contains('F')) | (Studentsplan['التقدير'].str.contains('مسجل')) | (
-            Studentsplan['التقدير'].isna()))]
+    passedCourses = Studentsplan.loc[~ ((Studentsplan['التقدير'].str.contains('F')) | (Studentsplan['التقدير'].str.contains('مسجل')) | (Studentsplan['التقدير'].isna()))]
+    remainingCourses = Studentsplan.loc[((Studentsplan['التقدير'].str.contains('F')) | (Studentsplan['التقدير'].str.contains('مسجل')) | (Studentsplan['التقدير'].isna()))]
+    print(passedCourses['أسم المادة'].tolist())
     passedCourses.reset_index(inplace=True)
     remainingCourses.reset_index(inplace=True)
     maxCreditsForStudentGPA = pd.read_csv('max.csv')
@@ -577,16 +584,13 @@ def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
             break
     academicPlan.loc[academicPlan['أسم المادة'].isin(passedCourses['أسم المادة']), 'اجتاز المقرر'] = True
     for i in range(len(remainingCourses)):
-        academicPlan.at[(academicPlan[
-                             academicPlan['سلسلة المتطلبات'].str.contains(remainingCourses.loc[i, "أسم المادة"],
-                                                                          na=False,
-                                                                          regex=False)].index.values), 'اجتاز سلسلة المتطلبات'] = False
-    # offeredCourses = offeredCourses.loc[~ ((offeredCourses['الشعبة'].str.startswith('I')) & (offeredCourses['الشعبة'].str.endswith('G')))]
-    offeredCourses = offeredCourses.dropna(how='all', axis=0)
-    academicPlan = academicPlan.loc[
-        (academicPlan['اجتاز سلسلة المتطلبات'] == True) & (academicPlan['اجتاز المقرر'] == False) & academicPlan[
-            'أسم المادة'].isin(offeredCourses['اسم المادة']) & (academicPlan['أسم المادة'].isin(Studentsplan['أسم المادة']))]
+        academicPlan.at[(academicPlan[academicPlan['سلسلة المتطلبات'].str.contains(remainingCourses.loc[i, "أسم المادة"],na=False,regex=False)].index.values), 'اجتاز سلسلة المتطلبات'] = False
 
+    # offeredCourses = offeredCourses.loc[~ ((offeredCourses['الشعبة'].str.startswith('I')) & (offeredCourses['الشعبة'].str.endswith('G')))]
+
+    offeredCourses = offeredCourses.dropna(how='all', axis=0)
+    academicPlan = academicPlan.loc[(academicPlan['اجتاز سلسلة المتطلبات'] == True) & (academicPlan['اجتاز المقرر'] == False) & academicPlan['أسم المادة'].isin(offeredCourses['اسم المادة']) & (academicPlan['أسم المادة'].isin(Studentsplan['أسم المادة'])) ]
+    print(academicPlan['أسم المادة'].tolist())
     Studentsleve = academicPlan.loc[academicPlan['اجتاز المقرر'] == False]['المستوى'].min()
     academicPlan['أولية'] = academicPlan['طول سلسلة المتطلبات'] + academicPlan['عدد المواد المتطلبة']
     academicPlan.loc[academicPlan['المستوى'] == Studentsleve, 'أولية'] = academicPlan['أولية'] + 1
@@ -601,44 +605,37 @@ def CoursesTaken(Studentsplan, offeredCourses, transcripDF):
             ca = academicPlan.loc[i, 'سلسلة المتطلبات'].split(',')
             ave = passedCourses.loc[passedCourses['أسم المادة'].isin(ca)]['الدرجة'].sum() / len(ca)
             academicPlan.loc[i, 'متوسط درجات سلسله المتطلبات'] = float(format(ave, '.2f'))
-    academicPlan = academicPlan.sort_values(by=['أولية', 'المستوى', "متوسط درجات سلسله المتطلبات"],
-                                            ascending=[False, True, False])
+    academicPlan = academicPlan.sort_values(by=['أولية', 'المستوى', "متوسط درجات سلسله المتطلبات"], ascending=[False, True, False])
     academicPlan = academicPlan.reset_index(drop=True)
-
-    CoursesCanTaken = academicPlan.loc[~ (
-                (academicPlan['أسم المادة'].str.contains("مقرر اختياري في التخصص", na=False, regex=False)) | (
-            academicPlan['أسم المادة'].str.contains("مقرر اختياري حر")) | (
-                    academicPlan['أسم المادة'].str.contains("متطلب جامعة اختياري")) | (
-                    academicPlan['أسم المادة'].str.contains("اختياري علوم طبيعية")))]
-    CoursesCanTaken = CoursesCanTaken[['أسم المادة', 'وحدات معتمدة']]
-
+    CoursesCanTaken = academicPlan.loc[~ ((academicPlan['أسم المادة'].str.contains("مقرر اختياري في التخصص", na=False, regex=False)) | (academicPlan['أسم المادة'].str.contains("مقرر اختياري حر")) | (academicPlan['أسم المادة'].str.contains("متطلب جامعة اختياري")) | (academicPlan['أسم المادة'].str.contains("اختياري علوم طبيعية")))]
+    CoursesCanTaken = CoursesCanTaken[['أسم المادة','وحدات معتمدة' , 'أولية']]
+    academicPlan.to_csv('kkkkkkkkkk.csv')
     if academicPlan['أسم المادة'].str.contains("مقرر اختياري في التخصص", na=False, regex=False).sum() > 0:
-        specializationElectivesCourses = SpecializationElectivesSpecializationElectives(offeredCourses, transcripDF,
-                                                                                        remainingCourses, passedCourses)
+        specializationElectivesCourses = SpecializationElectivesSpecializationElectives(offeredCourses, transcripDF,remainingCourses, passedCourses)
         specializationElectivesCourses['وحدات معتمدة'] = 3
-        specializationElectivesCourses = specializationElectivesCourses[['اسـم المقرّر', 'وحدات معتمدة']]
-        CoursesCanTaken = pd.concat(
-            [CoursesCanTaken, specializationElectivesCourses.rename(columns={'اسـم المقرّر': 'أسم المادة'})], axis=0)
+        specializationElectivesCourses = specializationElectivesCourses[['اسـم المقرّر','وحدات معتمدة']]
+        CoursesCanTaken = pd.concat([CoursesCanTaken, specializationElectivesCourses.rename(columns={'اسـم المقرّر': 'أسم المادة'})], axis=0)
 
     if academicPlan['أسم المادة'].str.contains("مقرر اختياري حر", regex=False).sum() > 0:
+        print("انا مقرر حر")
         freeElectiveCourses = FreeElectiveCoursess(offeredCourses, transcripDF)
         freeElectiveCourses['وحدات معتمدة'] = 2
-        freeElectiveCourses = freeElectiveCourses[['اسم المادة', 'وحدات معتمدة']]
-        CoursesCanTaken = pd.concat([CoursesCanTaken, freeElectiveCourses.rename(columns={'اسم المادة': 'أسم المادة'})],
-                                    axis=0)
+        freeElectiveCourses = freeElectiveCourses[['اسم المادة','وحدات معتمدة' ]]
+        freeElectiveCourses.to_csv('xxxxxxxxxxxxxxxxxxxx.csv')
+        CoursesCanTaken = pd.concat([CoursesCanTaken, freeElectiveCourses.rename(columns={'اسم المادة': 'أسم المادة'})],axis=0)
     if academicPlan['أسم المادة'].str.contains("متطلب جامعة اختياري").sum() > 0:
         UniversityRequirementsCourses = universityRequirementsCoursess(offeredCourses, transcripDF)
         UniversityRequirementsCourses['وحدات معتمدة'] = 2
-        UniversityRequirementsCourses = UniversityRequirementsCourses[['اسم المادة', 'وحدات معتمدة']]
-        CoursesCanTaken = pd.concat(
-            [CoursesCanTaken, UniversityRequirementsCourses.rename(columns={'اسم المادة': 'أسم المادة'})], axis=0)
+        UniversityRequirementsCourses = UniversityRequirementsCourses[['اسم المادة','وحدات معتمدة' ]]
+        CoursesCanTaken = pd.concat([CoursesCanTaken, UniversityRequirementsCourses.rename(columns={'اسم المادة': 'أسم المادة'})], axis=0)
     if academicPlan['أسم المادة'].str.contains("اختياري علوم طبيعية").sum() > 0:
+
         SpecializationNaturalsciencesCourse = SpecializationNaturalsciencesCoursess(offeredCourses, Studentsplan)
         SpecializationNaturalsciencesCourse['وحدات معتمدة'] = 3
-        SpecializationNaturalsciencesCourse = SpecializationNaturalsciencesCourse[['اسم المادة', 'وحدات معتمدة']]
-        CoursesCanTaken = pd.concat(
-            [CoursesCanTaken, SpecializationNaturalsciencesCourse.rename(columns={'اسم المادة': 'أسم المادة'})], axis=0)
+        SpecializationNaturalsciencesCourse = SpecializationNaturalsciencesCourse[['اسم المادة','وحدات معتمدة']]
+        CoursesCanTaken = pd.concat([CoursesCanTaken, SpecializationNaturalsciencesCourse.rename(columns={'اسم المادة': 'أسم المادة'})], axis=0)
     CoursesCanTaken = CoursesCanTaken.drop_duplicates(subset=['أسم المادة'])
+    CoursesCanTaken.to_csv('iiiiiii.csv')
     return CoursesCanTaken
 
 
@@ -679,8 +676,6 @@ def FindTable(CTable, ListOfCoursesSections, nocCnflict=True):
                                     a2[0] <= a[1] <= a2[1]):
                                 if not nocCnflict:
                                     CnflictCourses = CnflictCourses.append(CTable[i].iloc[k], ignore_index=True)
-
-                                # print(s1)
                                 t = False
 
             if not t and not nocCnflict:
@@ -701,8 +696,30 @@ def CoursesTakenSchedule( offeredCourses,nameCoursesCanTaken,maxCredits):
     nameCoursesCanTaken = nameCoursesCanTaken.loc[( ((nameCoursesCanTaken['وحدات معتمدة'] + registerdeCreditsSchedule) <= maxCredits) & (~(nameCoursesCanTaken['أسم المادة'].isin(studentSchedule['المادة']))))]
     if len(nameCoursesCanTaken) > 0:
         nameCoursesCanTaken = nameCoursesCanTaken['أسم المادة'].tolist()
+        print(nameCoursesCanTaken)
         table = []
-        table.append(pd.merge(offeredCourses, studentSchedule.rename(columns={'المادة': 'اسم المادة', 'شعبة': 'الشعبة'}),on=['اسم المادة', 'الشعبة'], how='inner', indicator=False))
+        studentScheduleteamp = studentSchedule
+        studentScheduleteamp = studentScheduleteamp[ ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'المادة', 'رمز', 'رقم', 'شعبة']]
+        offeredCoursestamp = pd.merge(offeredCourses,studentScheduleteamp.rename(columns={'المادة': 'اسم المادة', 'شعبة': 'الشعبة'}),on=['اسم المادة', 'الشعبة'], how='inner', indicator=False)
+        studentScheduleteamp = studentSchedule.loc[(~studentSchedule['المادة'].isin(offeredCoursestamp['اسم المادة']))]
+        # y = studentSchedule
+        days = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس']
+        for i in range(len(days)):
+            studentScheduleteamp.loc[studentScheduleteamp[days[i]].isnull(), days[i]] = studentScheduleteamp[ 'بداية'] + '-' +  studentScheduleteamp['نهاية']
+        studentScheduleteamp.reset_index(inplace=True, drop=True)
+        for i in range(len(studentScheduleteamp)):
+            if studentScheduleteamp['المادة'].iloc[i] != '-':
+                for j in range(i + 1, len(studentScheduleteamp)):
+                    if studentScheduleteamp['المادة'].iloc[j] != '-':
+                        break
+                    for d in range(len(days)):
+                        if studentScheduleteamp[days[d]].iloc[j] != '-':
+                            studentScheduleteamp.loc[i, days[d]] = studentScheduleteamp['بداية'].iloc[j] + '-' + studentScheduleteamp['نهاية'].iloc[j]
+        studentScheduleteamp = studentScheduleteamp.loc[studentScheduleteamp['المادة'] != '-']
+        studentScheduleteamp = studentScheduleteamp[['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'المادة', 'رمز', 'رقم']]
+        studentScheduleteamp = studentScheduleteamp.rename(columns={'أحد': 'الاحد', 'اثنين': 'الاثنين', 'ثلاثاء': 'الثلاثاء', 'أربعاء': 'الاربعاء', 'خميس': 'الخميس','المادة': 'اسم المادة', 'رمز': 'رمز المادةو الرقم.1', 'رقم': 'رمز المادةو الرقم'})
+        table.append(pd.concat([offeredCoursestamp, studentScheduleteamp]))
+        #table.append(pd.merge(offeredCourses, studentSchedule.rename(columns={'المادة': 'اسم المادة', 'شعبة': 'الشعبة'}),on=['اسم المادة', 'الشعبة'], how='inner', indicator=False))
         listofCoursesAndSections = pd.DataFrame(columns=offeredCourses.columns)
         for i in range(len(nameCoursesCanTaken)):
             CoursesSections = offeredCourses.loc[offeredCourses['اسم المادة'].str.contains(nameCoursesCanTaken[i], na=False, regex=False)]
@@ -730,14 +747,36 @@ def CoursesNotTakenSchedule(offeredCourses,nameCoursesCanTaken,maxCredits):
     global mes1
     mes1 = ''
 
-    nameCoursesCanTaken = nameCoursesCanTaken.loc[(
-((nameCoursesCanTaken['وحدات معتمدة'] + registerdeCreditsSchedule) <= maxCredits) & ( ~(nameCoursesCanTaken['أسم المادة'].isin(studentSchedule['المادة']))))]
+    nameCoursesCanTaken = nameCoursesCanTaken.loc[(((nameCoursesCanTaken['وحدات معتمدة'] + registerdeCreditsSchedule) <= maxCredits) & ( ~(nameCoursesCanTaken['أسم المادة'].isin(studentSchedule['المادة']))))]
 
     if len(nameCoursesCanTaken) > 0  :
 
         nameCoursesCanTaken = nameCoursesCanTaken['أسم المادة'].tolist()
         table = []
-        table.append(pd.merge(offeredCourses, studentSchedule.rename(columns={'المادة': 'اسم المادة', 'شعبة': 'الشعبة'}),on=['اسم المادة', 'الشعبة'], how='inner', indicator=False))
+        studentScheduleteamp = studentSchedule
+        studentScheduleteamp = studentScheduleteamp[
+            ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'المادة', 'رمز', 'رقم', 'شعبة']]
+        offeredCoursestamp = pd.merge(offeredCourses,studentScheduleteamp.rename(columns={'المادة': 'اسم المادة', 'شعبة': 'الشعبة'}),on=['اسم المادة', 'الشعبة'], how='inner', indicator=False)
+        studentScheduleteamp = studentSchedule.loc[(~studentSchedule['المادة'].isin(offeredCoursestamp['اسم المادة']))]
+        # y = studentSchedule
+        days = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس']
+        for i in range(len(days)):
+            studentScheduleteamp.loc[studentScheduleteamp[days[i]].isnull(), days[i]] = studentScheduleteamp[
+                                                                                            'بداية'] + '-' + \
+                                                                                        studentScheduleteamp['نهاية']
+        studentScheduleteamp.reset_index(inplace=True, drop=True)
+        for i in range(len(studentScheduleteamp)):
+            if studentScheduleteamp['المادة'].iloc[i] != '-':
+                for j in range(i + 1, len(studentScheduleteamp)):
+                    if studentScheduleteamp['المادة'].iloc[j] != '-':
+                        break
+                    for d in range(len(days)):
+                        if studentScheduleteamp[days[d]].iloc[j] != '-':
+                            studentScheduleteamp.loc[i, days[d]] = studentScheduleteamp['بداية'].iloc[j] + '-' + studentScheduleteamp['نهاية'].iloc[j]
+        studentScheduleteamp = studentScheduleteamp.loc[studentScheduleteamp['المادة'] != '-']
+        studentScheduleteamp = studentScheduleteamp[['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'المادة', 'رمز', 'رقم']]
+        studentScheduleteamp = studentScheduleteamp.rename(columns={'أحد': 'الاحد', 'اثنين': 'الاثنين', 'ثلاثاء': 'الثلاثاء', 'أربعاء': 'الاربعاء', 'خميس': 'الخميس','المادة': 'اسم المادة', 'رمز': 'رمز المادةو الرقم.1', 'رقم': 'رمز المادةو الرقم'})
+        table.append(pd.concat([offeredCoursestamp, studentScheduleteamp]))
         listofCoursesAndSections = []
         for i in range(len(nameCoursesCanTaken)):
             CoursesSections = offeredCourses.loc[offeredCourses['اسم المادة'].str.contains(nameCoursesCanTaken[i], na=False, regex=False)]
@@ -800,13 +839,13 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
         if (maxCreditsForStudentGPA['المعدل من'].iloc[i] <= GPA and GPA <= maxCreditsForStudentGPA['المعدل الى'].iloc[
             i]) and (semester in maxCreditsForStudentGPA['الفصل الدراسي'].iloc[i]):
             maxCredits = maxCreditsForStudentGPA['الحد الأعلى من الوحدات المسجلة '].iloc[i]
-            avaCoursesOf4Credits = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-3]].loc[i]
-            avaCoursesOf3Credits = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-2]].loc[i]
-            avaCoursesOf2Credits = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-1]].loc[i]
-            remainingCreditsForCurrentSemesterGraduate = \
-            maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-5]].loc[i]
-            remainingCreditsForNextSemesterGraduate = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-4]].loc[
-                i]
+            avaCoursesOf4Credits = maxCreditsForStudentGPA['اعلى عدد مقررات  التي وحداتها 4'].loc[i]
+            avaCoursesOf3Credits = maxCreditsForStudentGPA['اعلى عدد مقررات  التي وحداتها 3'].loc[i]
+            avaCoursesOf2Credits = maxCreditsForStudentGPA['اعلى عدد مقررات  التي وحداتها 2'].loc[i]
+            remainingCreditsForCurrentSemesterGraduate = maxCreditsForStudentGPA['الحد الأعلى من الوحدات المسجلة  لخريج الفصل الحالي'].loc[i]
+            remainingForGPNextSum = maxCreditsForStudentGPA['الحد الأعلى من الوحدات المتبقية لاخذ مشروع التخرج الفصل القادم'].loc[i]
+
+            #remainingCreditsForNextSemesterGraduate = maxCreditsForStudentGPA[maxCreditsForStudentGPA.columns[-4]].loc[i]
             break
     remainingCredits = remainingCourses['وحدات معتمدة'].sum()
     passGraduationProject1 = "مشروع التخرج(1)" not in remainingCourses["أسم المادة"].values
@@ -851,14 +890,17 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
             allOfferedCourses = allOfferedCourses.loc[
                 ~ ((allOfferedCourses['الشعبة'].str.startswith('I')) & (allOfferedCourses['الشعبة'].str.endswith('G')))]
             allOfferedCourses = allOfferedCourses.dropna(how='all', axis=0)
-            academicPlan = academicPlan.loc[
-                (academicPlan['اجتاز سلسلة المتطلبات'] == True) & (academicPlan['اجتاز المقرر'] == False) &
-                academicPlan['أسم المادة'].isin(allOfferedCourses['اسم المادة'])]
+            academicPlan = academicPlan.loc[ (academicPlan['اجتاز سلسلة المتطلبات'] == True) & (academicPlan['اجتاز المقرر'] == False) &academicPlan['أسم المادة'].isin(allOfferedCourses['اسم المادة'])]
 
             academicPlan['أولية'] = academicPlan['طول سلسلة المتطلبات'] + academicPlan['عدد المواد المتطلبة']
             academicPlan.loc[academicPlan['المستوى'] == Studentsleve, 'أولية'] = academicPlan['أولية'] + 1
+            academicPlan.loc[academicPlan['المستوى'] <= (Studentsleve + 1), 'أولية'] = academicPlan['أولية'] + 1
             academicPlan.loc[academicPlan['المستوى'] <= (Studentsleve + 2), 'أولية'] = academicPlan['أولية'] + 1
+            academicPlan.loc[academicPlan['المستوى'] <= (Studentsleve + 3), 'أولية'] = academicPlan['أولية'] + 1
             academicPlan.loc[academicPlan['هل لها متطلب المستوى التالي'] == True, 'أولية'] = academicPlan['أولية'] + 1
+            if remainingCredits - maxCredits <= remainingForGPNextSum :
+                maxpre = academicPlan['أولية'].max()
+                academicPlan.loc[academicPlan['متطلب لمشروع التخرج'] == True, 'أولية'] = maxpre + 1
             academicPlan = academicPlan.reset_index(drop=True)
             academicPlan["متوسط درجات سلسله المتطلبات"] = 0.00
 
@@ -867,11 +909,15 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                 if not c.__eq__(""):
                     ca = academicPlan.loc[i, 'سلسلة المتطلبات'].split(',')
                     ave = passedCourses.loc[passedCourses['أسم المادة'].isin(ca)]['الدرجة'].sum() / len(ca)
+
+                    print(academicPlan.loc[i, 'أسم المادة'])
+                    print(passedCourses.loc[passedCourses['أسم المادة'].isin(ca)]['أسم المادة'].tolist())
+                    print('******************************************')
                     academicPlan.loc[i, 'متوسط درجات سلسله المتطلبات'] = float(format(ave, '.2f'))
-            academicPlan = academicPlan.sort_values(by=['أولية', 'المستوى', "متوسط درجات سلسله المتطلبات"],
-                                                    ascending=[False, True, False])
+            academicPlan = academicPlan.sort_values(by=['أولية', 'المستوى', "متوسط درجات سلسله المتطلبات"],ascending=[False, True, False])
 
             academicPlan = academicPlan.reset_index(drop=True)
+            academicPlan.to_csv('ggggggggg.csv')
             registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
             if 'مقرر اختياري في التخصص' in academicPlan['أسم المادة'].iloc[0]:
                 if not haveSpecializationElectives:
@@ -916,23 +962,22 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                 UniversityRequirementsCourses.drop(index=UniversityRequirementsCourses.index[0], axis=0, inplace=True)
 
             else:
-                CoursesSections = allOfferedCourses.loc[
-                    allOfferedCourses['اسم المادة'].str.contains(academicPlan['أسم المادة'].iloc[0], na=False,regex=False)]
+                CoursesSections = allOfferedCourses.loc[allOfferedCourses['اسم المادة'].str.contains(academicPlan['أسم المادة'].iloc[0], na=False,regex=False)]
             academicPlan.drop(index=academicPlan.index[0], axis=0, inplace=True)
             for j in range(len(CoursesSections)):
                 Table.append(pd.DataFrame(columns=allOfferedCourses.columns).append(CoursesSections.iloc[j]))
             while not academicPlan.empty and (registerdeCredits + academicPlan['وحدات معتمدة'].min()) <= maxCredits:
-
+                notdrap = False
                 if ((registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]) <= maxCredits):
+
                     if 'مشروع التخرج' in academicPlan['أسم المادة'].iloc[0]:
-                        academicPlan = academicPlan.loc[
-                            ~ (academicPlan['أسم المادة'].str.contains('مشروع التخرج', na=False, regex=False))]
+                        academicPlan = academicPlan.loc[ ~ (academicPlan['أسم المادة'].str.contains('مشروع التخرج', na=False, regex=False))]
                         haveGraduationProject = True
 
                     if 'مقرر اختياري في التخصص' in academicPlan['أسم المادة'].iloc[0]:
                         if not haveSpecializationElectives:
                             haveSpecializationElectives = True
-                            specializationElectivesCourses = SpecializationElectivesSpecializationElectives(allOfferedCourses, transcripDF, remainingCourses)
+                            specializationElectivesCourses = SpecializationElectivesSpecializationElectives(allOfferedCourses, transcripDF, remainingCourses,passedCourses)
 
                         while True and not specializationElectivesCourses.empty:
                             CoursesSections = allOfferedCourses.loc[allOfferedCourses['اسم المادة'].str.contains(
@@ -942,6 +987,7 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                                 SpecializationElectivesName.append(specializationElectivesCourses['اسـم المقرّر'].iloc[0])
                                 Table = tampTable
                                 specializationElectivesCourses.drop(index=specializationElectivesCourses.index[0],axis=0, inplace=True)
+                                #registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
                                 break
                             specializationElectivesCourses.drop(index=specializationElectivesCourses.index[0], axis=0,inplace=True)
 
@@ -961,12 +1007,13 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                                 Table = tampTable
                                 freeElectiveName.append(freeElectiveCourses['اسم المادة'].iloc[0])
                                 freeElectiveCourses.drop(index=freeElectiveCourses.index[0], axis=0, inplace=True)
+                                #registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
                                 break
                             freeElectiveCourses.drop(index=freeElectiveCourses.index[0], axis=0, inplace=True)
                     elif 'اختياري علوم طبيعية' in academicPlan['أسم المادة'].iloc[0]:
                         if not haveSpecializationNaturalsciencesCourses:
                             haveSpecializationNaturalsciencesCourses = True
-                            SpecializationNaturalsciencesCourses = SpecializationNaturalsciencesCourses(allOfferedCourses,Studentsplan)
+                            SpecializationNaturalsciencesCourses = SpecializationNaturalsciencesCoursess(allOfferedCourses,Studentsplan)
                         while True and not SpecializationNaturalsciencesCourses.empty:
                             CoursesSections = allOfferedCourses.loc[allOfferedCourses['اسم المادة'].str.contains(
                                 SpecializationNaturalsciencesCourses['اسم المادة'].iloc[0], na=False, regex=False)]
@@ -976,6 +1023,7 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                                 SpecializationNaturalsciencesCoursesName.append(SpecializationNaturalsciencesCourses['اسم المادة'].iloc[0])
                                 Table = tampTable
                                 SpecializationNaturalsciencesCourses.drop(index=SpecializationNaturalsciencesCourses.index[0],axis=0, inplace=True)
+                                #registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
                                 break
                             SpecializationNaturalsciencesCourses.drop(index=SpecializationNaturalsciencesCourses.index[0],axis=0, inplace=True)
                     elif 'متطلب جامعة اختياري' in academicPlan['أسم المادة'].iloc[0]:
@@ -990,8 +1038,9 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                                 UniversityRequirementsName.append(UniversityRequirementsCourses['اسم المادة'].iloc[0])
                                 UniversityRequirementsCourses.drop(index=UniversityRequirementsCourses.index[0], axis=0, inplace=True)
                                 Table = tampTable
+                                #registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
                                 break
-                            UniversityRequirementsCourses.drop(index=UniversityRequirementsCourses.index[0], axis=0,nplace=True)
+                            UniversityRequirementsCourses.drop(index=UniversityRequirementsCourses.index[0], axis=0,inplace=True)
 
                     else:
                         CoursesSections = allOfferedCourses.loc[
@@ -1000,29 +1049,32 @@ def optimalCourses(Studentsplan, allOfferedCourses, transcripDF):
                         tampTable = FindTable(Table, CoursesSections)
                         if len(tampTable )> 0:
                             Table = tampTable
-                            registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
-
-                    if academicPlan['وحدات معتمدة'].iloc[0] == 4:
-                        countOf4Credits = countOf4Credits + 1
-                        if countOf4Credits == avaCoursesOf4Credits and not academicPlan.loc[
-                            academicPlan['وحدات معتمدة'] != 4].empty:
-                            academicPlan = academicPlan.loc[academicPlan['وحدات معتمدة'] != 4]
-                            academicPlan = academicPlan.reset_index(drop=True)
-                    if academicPlan['وحدات معتمدة'].iloc[0] == 3:
-                        countOf3Credits = countOf3Credits + 1
-                        if countOf3Credits == avaCoursesOf3Credits and not academicPlan.loc[
-                            academicPlan['وحدات معتمدة'] != 3].empty:
-                            academicPlan = academicPlan.loc[academicPlan['وحدات معتمدة'] != 3]
-                            academicPlan = academicPlan.reset_index(drop=True)
-                    if academicPlan['وحدات معتمدة'].iloc[0] == 2:
-                        countOf2Credits = countOf2Credits + 1
-                        if countOf2Credits == avaCoursesOf2Credits and not academicPlan.loc[
-                            academicPlan['وحدات معتمدة'] != 2].empty:
-                            academicPlan = academicPlan.loc[academicPlan['وحدات معتمدة'] != 2]
-                            academicPlan = academicPlan.reset_index(drop=True)
-
-                    registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
-                    academicPlan.drop(index=academicPlan.index[0], axis=0, inplace=True)
+                            #registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
+                    if len(tampTable) > 0 :
+                        registerdeCredits = registerdeCredits + academicPlan['وحدات معتمدة'].iloc[0]
+                        if academicPlan['وحدات معتمدة'].iloc[0] == 4:
+                            countOf4Credits = countOf4Credits + 1
+                            if countOf4Credits == avaCoursesOf4Credits and not academicPlan.loc[
+                                academicPlan['وحدات معتمدة'] != 4].empty:
+                                academicPlan = academicPlan.loc[academicPlan['وحدات معتمدة'] != 4]
+                                academicPlan = academicPlan.reset_index(drop=True)
+                                notdrap = True
+                        if academicPlan['وحدات معتمدة'].iloc[0] == 3:
+                            countOf3Credits = countOf3Credits + 1
+                            if countOf3Credits == avaCoursesOf3Credits and not academicPlan.loc[
+                                academicPlan['وحدات معتمدة'] != 3].empty:
+                                academicPlan = academicPlan.loc[academicPlan['وحدات معتمدة'] != 3]
+                                academicPlan = academicPlan.reset_index(drop=True)
+                                notdrap = True
+                        if academicPlan['وحدات معتمدة'].iloc[0] == 2:
+                            countOf2Credits = countOf2Credits + 1
+                            if countOf2Credits == avaCoursesOf2Credits and not academicPlan.loc[
+                                academicPlan['وحدات معتمدة'] != 2].empty:
+                                academicPlan = academicPlan.loc[academicPlan['وحدات معتمدة'] != 2]
+                                academicPlan = academicPlan.reset_index(drop=True)
+                                notdrap = True
+                    if not notdrap :
+                        academicPlan.drop(index=academicPlan.index[0], axis=0, inplace=True)
                 else:
                     cared = academicPlan['وحدات معتمدة'].iloc[0]
                     academicPlan = academicPlan.loc[academicPlan['وحدات معتمدة'] != cared]
@@ -1235,7 +1287,7 @@ def optimalCoursesWithSchedule ():
     if session.get('login') and session.get('user_type') == 'طالب' :
         return render_template('ScheduleSt.html', fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables,fullOffTables=fullOffTables,haveGraduationProject = haveGraduationProject , avlbelAddDreap = avlbelAddDreap)
     elif session.get('login') and  session.get('user_type') ==  'مرشد' :
-        return render_template('SHOAdv.html', fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables, fullOffTables=fullOffTables,haveGraduationProject = haveGraduationProject)
+        return render_template('SHOAdv.html', fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables, fullOffTables=fullOffTables,haveGraduationProject = haveGraduationProject, avlbelAddDreap = avlbelAddDreap)
     if session.get('login'):
         redirect('home')
     else :
@@ -1379,8 +1431,8 @@ def CoursesCanTaken():
             sortAnddivideTable((Table))
             if session.get('user_type') == 'طالب':
              return render_template('CoursesTakenSTAndSH.html', coursesname=CoursesSTCanTaken, max=maxCredits , fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables,fullOffTables=fullOffTables, avlbelAddDreap = avlbelAddDreap , crs = crs)
-            if session.get('user_type') == 'مرشد' :
-             return render_template('CoursesTakenSTAndSHADV.html', coursesname=CoursesSTCanTaken, max=maxCredits , fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables,fullOffTables=fullOffTables, avlbelAddDreap = 'false' , crs = crs)
+            if session.get('user_type') == 'طالب':
+             return render_template('CoursesTakenSTAndSH.html', coursesname=CoursesSTCanTaken, max=maxCredits , fullTables=fullTables, avlTables=avlTables, avlOffTables=avlOffTables,fullOffTables=fullOffTables, avlbelAddDreap = avlbelAddDreap , crs = crs)
 
         if session.get('user_type') == 'طالب':
             return render_template('CoursesTakenST.html' , coursesname = CoursesSTCanTaken , max = maxCredits , crs = [] )
@@ -1734,6 +1786,7 @@ def addCoursesADV(CR_NAME , CR_NUM , SENAME):
     driver.find_element_by_id("stdNumber").send_keys(studentID)
     driver.find_element_by_name("send").click()
 
+
     # كتابة رمز المادة
     driver.find_element_by_xpath('/html/body/form/table/tbody/tr[2]/td/table/tbody/tr/td[1]/table[3]/tbody/tr[1]/td/input').send_keys(CR_NAME)
     # كتابة رقم المادة
@@ -2029,7 +2082,6 @@ def download():
 @E_ADVISOR_APP.route('/HeadOfTheGuidanceCommitteeServices' , methods=['GET','POST'])
 def HeadOfTheGuidanceCommitteeServices():
     if session.get('login') and session.get('user_type') == 'لجنه الارشاد':
-
         if request.method == 'POST' :
 
             if 'File' not in request.files:
@@ -2054,11 +2106,13 @@ def HeadOfTheGuidanceCommitteeServices():
         if not gohome and not firstReq:
                 return ('', 204)
         elif gohome and not firstReq:
-             return redirect(url_for('StatisticForNextSemesterStudents'))
-            
+             return redirect(url_for('StatisticForNextSemester'))
+
+
+
     if session.get('login') :
         return redirect(url_for('home'))
-    return redirect(url_for('/'))
+    return redirect('/')
 @E_ADVISOR_APP.route('/studentServices' , methods=[ 'GET' , 'POST'])
 def studentServices():
     global studentName
@@ -2128,6 +2182,7 @@ def completionSchedule() :
 
         if len (CoursesSTCanTaken.loc[~CoursesSTCanTaken['أسم المادة'].isin(ff['اسم المادة'])]) > 0 :
             CoursesCanTakenSchedule = CoursesTakenSchedule(OfferedCourses,CoursesSTCanTaken,maxCredits)
+
             if len(CoursesCanTakenSchedule) > 0 :
                 CoursesCanTakenSchedule = CoursesCanTakenSchedule.rename(columns={'رمز المادةو الرقم': 'رقم المادة', 'رمز المادةو الرقم.1': 'رمز المادة'})
                 CoursesCanTakenSchedule['رقم المادة'] = CoursesCanTakenSchedule['رقم المادة'].apply(pd.to_numeric).astype('Int64')
@@ -2135,6 +2190,8 @@ def completionSchedule() :
                 CoursesCanTakenSchedule['استاذ المادة'] = CoursesCanTakenSchedule['استاذ المادة'].replace(np.nan, 'لم يتم تعين عضو هيئة تدريس')
                 columnsCoursesCanTaken = CoursesCanTakenSchedule.columns.values.tolist()
                 CoursesCanTakenSchedule = CoursesCanTakenSchedule.values.tolist()
+                print(CoursesCanTakenSchedule)
+                print('****************************************')
             else:
                 columnsCoursesCanTaken = []
                 CoursesCanTakenSchedule = []
@@ -2156,7 +2213,11 @@ def completionSchedule() :
                 CoursesCannotTakenSchedule[i]['رقم المادة'] = CoursesCannotTakenSchedule[i]['رقم المادة'].apply(pd.to_numeric).astype('Int64')
                 CoursesCannotTakenSchedule[i] = CoursesCannotTakenSchedule[i][['رمز المادة', 'رقم المادة', 'اسم المادة', 'الشعبة', 'استاذ المادة', 'الاحد', 'الاثنين', 'الثلاثاء','الاربعاء', 'الخميس',  'المتاح', 'المسجل','وحده']]
                 CoursesCannotTakenSchedule[i]['استاذ المادة'] = CoursesCannotTakenSchedule[i]['استاذ المادة'].replace(np.nan, 'لم يتم تعين عضو هيئة تدريس')
+                CoursesCannotTakenSchedule[i].fillna('',inplace=True)
                 CoursesCannotTakenSchedule[i] = CoursesCannotTakenSchedule[i].values.tolist()
+
+                print(CoursesCannotTakenSchedule[i])
+            print()
         #.columns.values.tolist()
 
 
@@ -2206,7 +2267,7 @@ def completionSchedule() :
 
             return render_template('CoursesTakenSchedulestd.html', columnsCoursesCanTaken=columnsCoursesCanTaken, CoursesCanTaken = CoursesCanTakenSchedule , columnsCoursesCannotTaken= CoursesCannotTakenScheduleColumns , CoursesCannotTaken = CoursesCannotTakenSchedule, regC =registerdeCreditsSchedule ,maxC = maxCredits , message = message , message1 = message1,avlbelAddDreap=avlbelAddDreap,isStu=True)
         if session.get('user_type') == 'مرشد':
-            return render_template('CoursesTakenScheduleAdv.html', columnsCoursesCanTaken=columnsCoursesCanTaken, CoursesCanTaken = CoursesCanTakenSchedule , columnsCoursesCannotTaken= CoursesCannotTakenScheduleColumns , CoursesCannotTaken = CoursesCannotTakenSchedule, regC =registerdeCreditsSchedule ,maxC = maxCredits , message = message , message1 = message1,avlbelAddDreap='false',isStu=False)
+            return render_template('CoursesTakenScheduleAdv.html', columnsCoursesCanTaken=columnsCoursesCanTaken, CoursesCanTaken = CoursesCanTakenSchedule , columnsCoursesCannotTaken= CoursesCannotTakenScheduleColumns , CoursesCannotTaken = CoursesCannotTakenSchedule, regC =registerdeCreditsSchedule ,maxC = maxCredits , message = message , message1 = message1,avlbelAddDreap= avlbelAddDreap,isStu=False)
     elif session.get('login') :
         return redirect('home')
     return redirect('/')
@@ -2279,19 +2340,16 @@ def ktmADDRE(CR_NAME,crs,password):
 
 @E_ADVISOR_APP.after_request
 def foo(response):
+
     method = request.method == "GET"
     path = request.path == "/" or request.path == '/HeadOfTheGuidanceCommitteeServices'
 
     #response = Response(__name__)
 
-
     if  path and not firstReq  and not gohome :
 
-        time.sleep(10)
-        if request.path == "/" :
-            return redirect('/')
-        else :
-            return redirect(url_for('HeadOfTheGuidanceCommitteeServices'))
+        time.sleep(15)
+        return redirect('/')
     return response
 
 
@@ -2304,7 +2362,7 @@ if __name__ == "__main__":
     E_ADVISOR_APP.static_folder = 'static'
 
 #    session(E_ADVISOR_APP)
-    E_ADVISOR_APP.config.update(dict(PREFERRED_URL_SCHEME='https'))
-    #E_ADVISOR_APP.run( port=1245 , threaded = True)
-    port = int(os.environ.get("PORT", 5000))
-    E_ADVISOR_APP.run(host='0.0.0.0', port=port, threaded = True)
+    #E_ADVISOR_APP.config.update(dict(PREFERRED_URL_SCHEME='https'))
+    E_ADVISOR_APP.run( port=1245 , threaded = True)
+    #port = int(os.environ.get("PORT", 5000))
+    #E_ADVISOR_APP.run(host='0.0.0.0', port=port, threaded = True)
