@@ -2342,7 +2342,7 @@ def ktmADDRE(CR_NAME,crs,password):
 def foo(response):
 
     method = request.method == "GET"
-    path = request.path == "/" or request.path == '/HeadOfTheGuidanceCommitteeServices'
+    path = request.path == "home" or request.path == '/HeadOfTheGuidanceCommitteeServices'
 
     #response = Response(__name__)
 
