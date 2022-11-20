@@ -30,7 +30,7 @@ from threading import Thread
 E_ADVISOR_APP = Flask(__name__)
 chrome_options = webdriver.ChromeOptions()
 gohome = False
-#chrome_options.headless = True
+chrome_options.headless = True
 
 class ReverseProxied(object):
 
